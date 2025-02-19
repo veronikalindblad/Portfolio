@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Veronika Lindblad</title>
+    
+    <!-- Importera CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <!-- Importera A-Frame -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>  
+</head>
+
+<body>
+    <a-scene>
+        <!-- Kamera -->
+        <a-entity id="camera" position="0 1.6 5" follow-box>
+            <a-camera></a-camera>
+        </a-entity>
+
+        <!-- Spelaren (liten kvadrat) -->
+        <a-box id="player" position="0 0 -5" color="black" depth="0.5" height="0.5" width="0.5"></a-box>
+
+        <a-sphere id="red" position="0 0 0" color="red" depth="0.5" height="0.5" width="0.5"></a-box>
+        <a-box id="green" position="1 2 -20" color="green" depth="10" height="1" width="0.5"></a-box>
+
+        <!-- Mark -->
+        <a-plane rotation="-90 0 0" width="50" height="50" color="white"></a-plane>
+    </a-scene>
+</body>
+
+<!-- Importera JavaScript -->
+<script src="../js/function.js"></script>
+</html>
