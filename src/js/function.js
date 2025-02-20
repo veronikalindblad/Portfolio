@@ -2,6 +2,8 @@ function redirectToCity() {
     window.location.href = "../html/city.html";
 }
 
+var coinCount = 0;
+
 // Vänta på att hela dokumentet och A-Frame är redo
 document.addEventListener("DOMContentLoaded", () => {
     
@@ -51,7 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
         theCoin = collideWithCoins(player, playerBody);
         if (theCoin) {
             coins = document.getElementById("coins");
-            coins.removeChild(theCoin); 
+            coins.removeChild(theCoin);
+            coinCount += 1; 
+            const coinCounter = document.getElementById("coinCounter");
+            coinCounter.setAttribute('text', 'value', 'Coins: ' + coinCount);
         }
         requestAnimationFrame(update);
     }

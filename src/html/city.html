@@ -19,6 +19,14 @@
         <a-entity id="player" position="0 0 -5" look-controls="enabled:false" wasd-controls="enabled:false">
             <a-box id="playerBody" position="0 0 0" color="black" depth="0.5" height="0.5" width="0.5"></a-box>
             <a-entity camera position="0 1.6 5"></a-entity>
+        
+            <a-entity id="coinCounter"
+                position="2.2 3 3" 
+                geometry="primitive: plane; height: 0.5; width: 1" 
+                material="color: white; opacity: 0.9" 
+                text="value: Coins: 0; color: grey; width: 2; align: center"
+                look-at="[camera]">
+            </a-entity>
         </a-entity>
 
         <a-entity id="solids">
@@ -128,7 +136,7 @@
         <a-box position="-6 0.02 10" height="0.8" width="0.8" depth="0.2" color="#92a25d"></a-box>
 
         <!-- Mark -->
-        <a-plane id="groundplane" rotation="-90 0 0" width="50" height="50" color="#c8d796"></a-plane>
+        <a-plane id="groundplane" rotation="-90 0 0" width="50" height="50" color="#c8d796"></a-plane>  
     </a-scene>
 </body>
 
