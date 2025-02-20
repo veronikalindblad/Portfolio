@@ -44,12 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (playerZ < -23) playerZ = -23;
         if (playerZ >  23) playerZ =  23;
 
-        // Uppdatera spelarens position (kvadraten)
-
+        // Uppdatera spelarens position
         player.setAttribute("position", `${playerX} 0 ${playerZ}`);
         if(collideWithSolids(player, playerBody))
             player.setAttribute("position", `${oldPlayerX} 0 ${oldPlayerZ}`);
-
+        theCoin = collideWithCoins(player, playerBody);
+        if (theCoin) {
+            coins = document.getElementById("coins");
+            coins.removeChild(theCoin); 
+        }
         requestAnimationFrame(update);
     }
     
@@ -84,4 +87,38 @@ function collideWithBox (player, playerBody, box) {
         if ( playerZfront > boxZback && playerZback < boxZfront)
             return true
     return false
+}
+
+//Mynt
+function collideWithCoins(player, playerBody) {
+    coins = document.getElementById("coins");
+    for(let i=0; i<coins.children.length; i++) {
+        let coin = coins.children.item(i);
+        if(collideWithSphere(player, playerBody, coin))
+            return coin
+    }
+    return null
+}
+
+function collideWithSphere (player, playerBody, sphere) {
+    radius = parseFloat(sphere.getAttribute("radius"));
+    playerX = player.getAttribute("position").x;
+    playerXleft = playerX - playerBody.getAttribute("width")/2;
+    playerXright = playerX + playerBody.getAttribute("width")/2;
+    sphereX = sphere.getAttribute("position").x;
+    sphereXleft = sphereX - radius;
+    sphereXright = sphereX + radius;
+
+    playerZ = player.getAttribute("position").z;
+    playerZback = playerZ - playerBody.getAttribute("depth")/2;
+    playerZfront = playerZ + playerBody.getAttribute("depth")/2;
+    sphereZ = sphere.getAttribute("position").z;
+    sphereZback = sphereZ - radius;
+    sphereZfront = sphereZ + radius;
+    if ( playerXright > sphereXleft && playerXleft < sphereXright) {
+        if ( playerZfront > sphereZback && playerZback < sphereZfront) {
+            return true;
+        }
+    }
+    return false;
 }
