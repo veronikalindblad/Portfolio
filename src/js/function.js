@@ -8,21 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const scene = document.querySelector("a-scene");
     const player = document.getElementById("player");
     console.log(player);
-    const cameraRig = document.querySelector('[follow-box]');
-    console.log(cameraRig);
-    
-    // Koppla follow-box till kamerans rig och spelaren
-    if (cameraRig && player) {
-        console.log(true)
-        cameraRig.setAttribute("follow-box", "target", player);
-        player.setAttribute("rotate-with-camera", "");
-        console.log(true)
-    }
 
     // Hantera spelarens rörelse
     let playerX = 0, playerZ = -5;
-    console.log("here")
-    const speed = 0.4;
+    const speed = 0.2;
     const keys = {
         ArrowUp: false,
         ArrowDown: false,
@@ -46,13 +35,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (keys.ArrowDown) playerZ += speed;
         if (keys.ArrowLeft) playerX -= speed;
         if (keys.ArrowRight) playerX += speed;
+        if (playerX < -23) playerX = -23;
+        if (playerX >  23) playerX =  23;
+        if (playerZ < -23) playerZ = -23;
+        if (playerZ >  23) playerZ =  23;
 
         // Uppdatera spelarens position (kvadraten)
         player.setAttribute("position", `${playerX} 0 ${playerZ}`);
-
-        // Håll kameran på samma höjd men följ spelaren
-        const camera = document.getElementById("camera");
-        //camera.setAttribute("position", `${playerX} 1.6 ${playerZ + 5}`);
 
         requestAnimationFrame(update);
     }
