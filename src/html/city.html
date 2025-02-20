@@ -17,16 +17,67 @@
     <a-scene>
         <!-- Spelaren med Kamera -->
         <a-entity id="player" position="0 0 -5" look-controls="enabled:false" wasd-controls="enabled:false">
-            <a-box position="0 0 0" color="black" depth="0.5" height="0.5" width="0.5"></a-box>
+            <a-box id="playerBody" position="0 0 0" color="black" depth="0.5" height="0.5" width="0.5"></a-box>
             <a-entity camera position="0 1.6 5"></a-entity>
         </a-entity>
-        
-        <!-- Hus -->
-        <a-box id="gray1" position="2 0 0" color="gray" depth="0.5" height="3.5" width="1.2"></a-box>
-        <a-box id="gray2" position="4 0 4" color="gray" depth="0.5" height="1.5" width="1"></a-box>
-        <a-box id="gray3" position="-8 0 -7" color="gray" depth="0.5" height="4" width="1"></a-box>
-        <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
 
+        <a-entity id="solids">
+            <!-- Hus -->
+            <a-box id="gray1" position="2 0 0" color="gray" depth="0.5" height="3.5" width="1.2"></a-box>
+            <a-box id="gray2" position="4 0 4" color="gray" depth="0.5" height="1.5" width="1"></a-box>
+            <a-box id="gray3" position="-8 0 -7" color="gray" depth="0.5" height="4" width="1"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+            <a-box id="gray4" position="-11 0 -6" color="gray" depth="0.5" height="2" width="1.5"></a-box>
+        </a-entity>
+        
         <!-- Moln -->
         <a-box id="white1" position="2 10 1" color="white" depth="2" height="1" width="5"></a-box>
         <a-box id="white2" position="5 12 2" color="white" depth="1" height="2" width="4"></a-box>
