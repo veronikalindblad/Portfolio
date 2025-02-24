@@ -3,6 +3,8 @@ function redirectToCity() {
 }
 
 var coinCount = 0;
+const lakesound = new Audio("../media/lake.wav");
+const coinsound = new Audio("../media/coin.wav");
 
 // Vänta på att hela dokumentet och A-Frame är redo
 document.addEventListener("DOMContentLoaded", () => {
@@ -48,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(collideWithLake(player, playerBody)) {
             vx /= 2;
             vz /= 2;
+            lakesound.play();
         }
 
         if(collideWithRoads(player, playerBody)) {
@@ -75,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             coinCount += 1; 
             const coinCounter = document.getElementById("coinCounter");
             coinCounter.setAttribute('text', 'value', 'Coins: ' + coinCount);
+            coinsound.play();
         }
         const infoBox = document.getElementById("infoBox");
         if(playerX != oldPlayerX || playerZ != oldPlayerZ)
