@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Hantera spelarens rörelse
     let playerX = 0, playerZ = -5;
-    const speed = 0.07;
+    const speed = 0.04;
     const keys = {
         ArrowUp: false,
         ArrowDown: false,
@@ -33,14 +33,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function update() {
         const player = document.getElementById("player");
-        playerX = player.getAttribute("position").x
-        playerZ = player.getAttribute("position").z
-        oldPlayerX = playerX
-        oldPlayerZ = playerZ
-        if (keys.ArrowUp) playerZ -= speed;
-        if (keys.ArrowDown) playerZ += speed;
-        if (keys.ArrowLeft) playerX -= speed;
-        if (keys.ArrowRight) playerX += speed;
+        playerX = player.getAttribute("position").x;
+        playerZ = player.getAttribute("position").z;
+        playerR = player.getAttribute("rotation").y;
+        oldPlayerX = playerX;
+        oldPlayerZ = playerZ;
+        vx = speed * Math.sin(playerR/57.296);
+        vz = speed * Math.cos(playerR/57.296);
+        
+        if (keys.ArrowUp)    { playerX -= vx; playerZ -= vz; }
+        if (keys.ArrowDown)  { playerX += vx; playerZ += vz; }
+        if (keys.ArrowLeft)  { playerX -= vz; playerZ += vx; }
+        if (keys.ArrowRight) { playerX += vz; playerZ -= vx; }
         if (playerX < -23) playerX = -23;
         if (playerX >  23) playerX =  23;
         if (playerZ < -23) playerZ = -23;
