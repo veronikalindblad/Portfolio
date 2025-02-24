@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Hantera spelarens rörelse
     let playerX = 0, playerZ = -5;
-    const speed = 0.04;
+    const speed = 0.06;
     const keys = {
         ArrowUp: false,
         ArrowDown: false,
@@ -40,7 +40,21 @@ document.addEventListener("DOMContentLoaded", () => {
         oldPlayerZ = playerZ;
         vx = speed * Math.sin(playerR/57.296);
         vz = speed * Math.cos(playerR/57.296);
+        if(collideWithSlows(player, playerBody)) {
+            vx /= 2;
+            vz /= 2;
+        }
         
+        if(collideWithLake(player, playerBody)) {
+            vx /= 2;
+            vz /= 2;
+        }
+
+        if(collideWithRoads(player, playerBody)) {
+            vx *= 2;
+            vz *= 2;
+        }
+
         if (keys.ArrowUp)    { playerX -= vx; playerZ -= vz; }
         if (keys.ArrowDown)  { playerX += vx; playerZ += vz; }
         if (keys.ArrowLeft)  { playerX -= vz; playerZ += vx; }
@@ -62,16 +76,33 @@ document.addEventListener("DOMContentLoaded", () => {
             const coinCounter = document.getElementById("coinCounter");
             coinCounter.setAttribute('text', 'value', 'Coins: ' + coinCount);
         }
+        const infoBox = document.getElementById("infoBox");
+        if(playerX != oldPlayerX || playerZ != oldPlayerZ)
+            infoBox.setAttribute("visible", "false");
+
         requestAnimationFrame(update);
     }
     
     update();
 });
 
+
 function collideWithSolids(player, playerBody) {
-    solids = document.getElementById("solids");
-    for(let i=0; i<solids.children.length; i++) {
-        let box = solids.children.item(i);
+    return collideWithBoxes(player, playerBody, "solids");
+}
+
+function collideWithSlows(player, playerBody) {
+    return collideWithBoxes(player, playerBody, "slows");
+}
+
+function collideWithRoads(player, playerBody) {
+    return collideWithBoxes(player, playerBody, "roads");
+}
+
+function collideWithBoxes(player, playerBody, aentity) {
+    parent = document.getElementById(aentity);
+    for(let i=0; i<parent.children.length; i++) {
+        let box = parent.children.item(i);
         if(collideWithBox(player, playerBody, box))
             return true
     }
@@ -130,4 +161,40 @@ function collideWithSphere (player, playerBody, sphere) {
         }
     }
     return false;
+}
+
+//Sjö
+function collideWithLake(player, playerBody) {
+    const lake = document.getElementById("lake");
+    if (lake && collideWithCircle(player, playerBody, lake)) {
+        return lake;
+    }
+    return null;
+}
+
+function collideWithCircle(player, playerBody, circle) {
+    const radius = parseFloat(circle.getAttribute("radius"));
+    //console.log(circle);
+    //console.log(circle.getAttribute("radius"));
+    //console.log(radius);
+    const playerPos = player.getAttribute("position");
+    const circlePos = circle.getAttribute("position");
+    
+    const playerX = playerPos.x;
+    const playerZ = playerPos.z;
+    const circleX = circlePos.x;
+    const circleZ = circlePos.z;
+    
+    const playerHalfWidth = playerBody.getAttribute("width") / 2;
+    const playerHalfDepth = playerBody.getAttribute("depth") / 2;
+    
+    const playerXleft = playerX - playerHalfWidth;
+    const playerXright = playerX + playerHalfWidth;
+    const playerZback = playerZ - playerHalfDepth;
+    const playerZfront = playerZ + playerHalfDepth;
+    
+    const dx = Math.max(playerXleft - circleX, 0, circleX - playerXright);
+    const dz = Math.max(playerZback - circleZ, 0, circleZ - playerZfront);
+    
+    return (dx * dx + dz * dz) < (radius * radius);
 }
