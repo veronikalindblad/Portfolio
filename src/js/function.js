@@ -6,6 +6,18 @@ var coinCount = 0;
 const lakesound = new Audio("../media/lake.wav");
 const coinsound = new Audio("../media/coin.wav");
 const slowssound = new Audio("../media/slows.wav");
+const placessound = new Audio("../media/places.wav");
+
+var isWalking = false;
+var bounceTimer = null;
+var bounceHeight = 0.08;
+var bounceSpeed = 150; // milliseconds
+const keys = {
+    ArrowUp: false,
+    ArrowDown: false,
+    ArrowLeft: false,
+    ArrowRight: false
+};
 
 // Vänta på att hela dokumentet och A-Frame är redo
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,17 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const scene = document.querySelector("a-scene");
     const player = document.getElementById("player");
     const playerBody = document.getElementById("playerBody");
-    console.log(player);
 
     // Hantera spelarens rörelse
     let playerX = 0, playerZ = -5;
     const speed = 0.06;
-    const keys = {
-        ArrowUp: false,
-        ArrowDown: false,
-        ArrowLeft: false,
-        ArrowRight: false
-    };
 
     document.addEventListener("keydown", (event) => {
         if (event.key in keys) keys[event.key] = true;
@@ -58,6 +63,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if(collideWithRoads(player, playerBody)) {
             vx *= 1.3;
             vz *= 1.3;
+        }
+
+        const place = collideWithPlaces(player, playerBody);
+        if(place) {
+            const info = document.getElementById(place.id + "Info");
+            if (info && info.getAttribute("visible") == false) {
+                console.log(info);
+                placessound.play();
+                info.setAttribute("visible", "true");
+                var signTimer = setTimeout(() => {
+                    info.parentNode.removeChild(info);
+                    place.parentNode.removeChild(place);    
+                    return;
+                    }, 
+                    5000
+                );    
+            }    
         }
 
         if (keys.ArrowUp)    { playerX -= vx; playerZ -= vz; }
@@ -95,7 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
             },
         }
         playerRot = playerAngles[keys.ArrowUp][keys.ArrowDown][keys.ArrowLeft][keys.ArrowRight];
-        console.log(playerRot);
         if (playerRot >= 0)
             playerBody.setAttribute("rotation", `0 ${playerRot} 0`);
 
@@ -118,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         requestAnimationFrame(update);
     }
-    
+    setupDogAnimation();
     update();
 });
 
@@ -144,12 +165,16 @@ function collideWithRoads(player, playerBody) {
     return collideWithBoxes(player, playerBody, "roads");
 }
 
+function collideWithPlaces(player, playerBody) {
+    return collideWithBoxes(player, playerBody, "places");
+}
+
 function collideWithBoxes(player, playerBody, aentity) {
     parent = document.getElementById(aentity);
     for(let i=0; i<parent.children.length; i++) {
         let box = parent.children.item(i);
         if(collideWithBox(player, playerBody, box))
-            return true
+            return box
     }
     return false
 }
@@ -239,4 +264,117 @@ function collideWithCircle(player, playerBody, circle) {
     const dz = Math.max(playerZback - circleZ, 0, circleZ - playerZfront);
     
     return (dx * dx + dz * dz) < (radius * radius);
+}
+
+function setupDogAnimation() {
+    const player = document.getElementById("player");
+    const playerBody = document.getElementById("playerBody");
+    const frontLeftLeg = document.getElementById("frontLeftLeg");
+    const frontRightLeg = document.getElementById("frontRightLeg");
+    const backLeftLeg = document.getElementById("backLeftLeg");
+    const backRightLeg = document.getElementById("backRightLeg");
+    
+    // Orginal position
+    const originalBodyY = 0.25;
+    const legOriginalY = {
+        frontLeftLeg: -0.1,
+        frontRightLeg: -0.1,
+        backLeftLeg: -0.1,
+        backRightLeg: -0.1
+    };
+    
+    document.addEventListener("keydown", (event) => {
+        if (event.key in keys) {
+            keys[event.key] = true;
+            
+            // Kolla om den ska börja animera
+            if (!isWalking && (keys.ArrowUp || keys.ArrowDown || keys.ArrowLeft || keys.ArrowRight)) {
+                isWalking = true;
+                startBounceAnimation();
+            }
+        }
+    });
+    
+    document.addEventListener("keyup", (event) => {
+        if (event.key in keys) {
+            keys[event.key] = false;
+            
+            // Kolla om den ska sluta animera
+            if (!(keys.ArrowUp || keys.ArrowDown || keys.ArrowLeft || keys.ArrowRight)) {
+                isWalking = false;
+                stopBounceAnimation();
+            }
+        }
+    });
+    
+    function startBounceAnimation() {
+        // Stoppa animation
+        stopBounceAnimation();
+        
+        // Påbörja aniamtion
+        let goingUp = true;
+        let currentY = originalBodyY;
+        let step = 0;
+        
+        bounceTimer = setInterval(() => {
+            if (!isWalking) {
+                stopBounceAnimation();
+                return;
+            }
+            
+            // Body bounce
+            if (goingUp) {
+                currentY += 0.04;
+                if (currentY >= originalBodyY + bounceHeight) {
+                    goingUp = false;
+                }
+            } else {
+                currentY -= 0.04;
+                if (currentY <= originalBodyY) {
+                    goingUp = true;
+                }
+            }
+            
+            // Update body position
+            playerBody.setAttribute("position", `0 ${currentY} 0`);
+            
+            // Animate legs
+            if (frontLeftLeg && frontRightLeg && backLeftLeg && backRightLeg) {
+                if (step % 2 === 0) {
+                    // First diagonal pair (front-left and back-right)
+                    frontLeftLeg.setAttribute("position", `${frontLeftLeg.getAttribute("position").x} ${legOriginalY.frontLeftLeg + 0.1} ${frontLeftLeg.getAttribute("position").z}`);
+                    backRightLeg.setAttribute("position", `${backRightLeg.getAttribute("position").x} ${legOriginalY.backRightLeg + 0.1} ${backRightLeg.getAttribute("position").z}`);
+                    
+                    // Reset other diagonal pair
+                    frontRightLeg.setAttribute("position", `${frontRightLeg.getAttribute("position").x} ${legOriginalY.frontRightLeg} ${frontRightLeg.getAttribute("position").z}`);
+                    backLeftLeg.setAttribute("position", `${backLeftLeg.getAttribute("position").x} ${legOriginalY.backLeftLeg} ${backLeftLeg.getAttribute("position").z}`);
+                } else {
+                    // Second diagonal pair (front-right and back-left)
+                    frontRightLeg.setAttribute("position", `${frontRightLeg.getAttribute("position").x} ${legOriginalY.frontRightLeg + 0.1} ${frontRightLeg.getAttribute("position").z}`);
+                    backLeftLeg.setAttribute("position", `${backLeftLeg.getAttribute("position").x} ${legOriginalY.backLeftLeg + 0.1} ${backLeftLeg.getAttribute("position").z}`);
+                    
+                    // Reset first diagonal pair
+                    frontLeftLeg.setAttribute("position", `${frontLeftLeg.getAttribute("position").x} ${legOriginalY.frontLeftLeg} ${frontLeftLeg.getAttribute("position").z}`);
+                    backRightLeg.setAttribute("position", `${backRightLeg.getAttribute("position").x} ${legOriginalY.backRightLeg} ${backRightLeg.getAttribute("position").z}`);
+                }
+                
+                step++;
+            }
+        }, bounceSpeed);
+    }
+    
+    function stopBounceAnimation() {
+        clearInterval(bounceTimer);
+        
+        // Reset body position
+        playerBody.setAttribute("position", `0 ${originalBodyY} 0`);
+        
+        // Reset leg positions
+        if (frontLeftLeg && frontRightLeg && backLeftLeg && backRightLeg) {
+            frontLeftLeg.setAttribute("position", `${frontLeftLeg.getAttribute("position").x} ${legOriginalY.frontLeftLeg} ${frontLeftLeg.getAttribute("position").z}`);
+            frontRightLeg.setAttribute("position", `${frontRightLeg.getAttribute("position").x} ${legOriginalY.frontRightLeg} ${frontRightLeg.getAttribute("position").z}`);
+            backLeftLeg.setAttribute("position", `${backLeftLeg.getAttribute("position").x} ${legOriginalY.backLeftLeg} ${backLeftLeg.getAttribute("position").z}`);
+            backRightLeg.setAttribute("position", `${backRightLeg.getAttribute("position").x} ${legOriginalY.backRightLeg} ${backRightLeg.getAttribute("position").z}`);
+        }
+    }
 }

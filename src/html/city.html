@@ -18,9 +18,9 @@
     <a-scene>
         <!-- Spelaren med Kamera -->
         <a-entity id="player" position="0 0 -5" look-controls="enabled:true" wasd-controls="enabled:false">
-            <a-box id="playerBody" material="opacity:0" position="0 0 0" rotation="0 180 0" 
+            <a-box id="playerBody" material="opacity:0" position="0 0 0" rotation="0 0 0" 
             depth="1" height="1" width="0.6">
-                <a-entity id="dog" position="0 0.5 0">
+                <a-entity id="dog" position="0 0.2 0">
                     <!-- Dog body - main rectangle -->
                     <a-box id="playerBody" position="0 0.2 0" color="#bb986a" depth="0.85" height="0.45" width="0.55"></a-box>
                     
@@ -55,8 +55,8 @@
                 position="1.9 3.36 3"
                 rotation="-10 0 0" 
                 geometry="primitive: plane; height: 0.5; width: 1" 
-                material="color: white; opacity: 0.85" 
-                text="value:         0; color: grey; width: 3.7; align: center"
+                material="color: white; opacity: 1" 
+                text="value:         0; color: black; width: 3.7; align: center"
                 look-at="[camera]">
                 <a-circle position="-0.32 0 0.01" radius="0.09" material="color: yellow"></a-circle>
             </a-entity>
@@ -65,9 +65,50 @@
                 position="0 2.5 3"
                 rotation="-10 0 0"  
                 geometry="primitive: plane; height: 0.8; width: 2.2" 
-                material="color: white; opacity: 0.85" 
-                text="value: Use the arrow keys to navigate!; color: grey; width: 3; align: center;"
+                material="color: white; opacity: 1" 
+                text="value: Use the arrow keys to get around!; color: black; width: 3; align: center;"
                 look-at="[camera]">
+            </a-entity>
+            
+            <!-- Områden info-->
+            <a-entity id="experienceInfo"
+            position="0 2.5 3"
+            rotation="-10 0 0"  
+            visible="false"
+            geometry="primitive: plane; height: 0.8; width: 3.2" 
+            material="color: white; opacity: 1" 
+            text="value: You have arrived at Experience junction! Explore the houses to learn more.; color: black; width: 3; align: center;"
+            look-at="[camera]">
+            </a-entity>
+        
+            <a-entity id="educationInfo"
+            position="0 2.5 3"
+            rotation="-10 0 0"  
+            visible="false"
+            geometry="primitive: plane; height: 0.8; width: 3.2" 
+            material="color: white; opacity: 1" 
+            text="value: You have arrived at Education town! Explore the houses to learn more.; color: black; width: 3; align: center;"
+            look-at="[camera]">
+            </a-entity>
+            
+            <a-entity id="moreInfo"
+            position="0 2.5 3"
+            rotation="-10 0 0"  
+            visible="false"
+            geometry="primitive: plane; height: 0.8; width: 3.2" 
+            material="color: white; opacity: 1" 
+            text="value: You have arrived at More valley! Explore the houses to learn more.; color: black; width: 3; align: center;"
+            look-at="[camera]">
+            </a-entity>
+        
+            <a-entity id="aboutMeInfo"
+            position="0 2.5 3"
+            rotation="-10 0 0"  
+            visible="false"
+            geometry="primitive: plane; height: 0.8; width: 3.2" 
+            material="color: white; opacity: 1" 
+            text="value: You have arrived at About me city! Explore the houses to learn more.; color: black; width: 3; align: center;"
+            look-at="[camera]">
             </a-entity>
         </a-entity>
 
@@ -96,9 +137,9 @@
             <a-box position="-2 0 14" color="gray" depth="0.5" height="2.5" width="0.5"></a-box>
             <a-box position="-3 0 11" color="gray" depth="0.5" height="4" width="1"></a-box>
             <a-box position="12 0 3" color="gray" depth="0.5" height="2" width="0.5"></a-box>
-            <a-box position="2 0 14" color="gray" depth="0.5" height="4.5" width="1"></a-box>
+            <a-box position="2 0 14" color="gray" depth="0.5" height="1" width="1"></a-box>
             <a-box position="6 0 17" color="gray" depth="0.5" height="2" width="0.5"></a-box>
-            <a-box position="4 0 -12" color="gray" depth="0.5" height="3" width="0.5"></a-box>
+            <a-box position="4 0 -12" color="gray" depth="1" height="3" width="1"></a-box>
             <a-box position="18 0 -2" color="gray" depth="0.5" height="5" width="1"></a-box>
             <a-box position="10 0 -14" color="gray" depth="0.5" height="4" width="1"></a-box>
             <a-box position="4 0 10" color="gray" depth="0.5" height="2" width="0.5"></a-box>
@@ -109,12 +150,19 @@
             <a-box position="19 0 6" height="2" width="0.3" depth="0.3" color="#a58b69"></a-box>
             <a-box position="14 0 -8" height="2" width="0.3" depth="0.3" color="#a58b69"></a-box>
             <a-box position="-20 0 15" height="2" width="0.3" depth="0.3" color="#a58b69"></a-box>
-        
+            <a-box position="-2 0 -12" height="2" width="0.3" depth="0.3" color="#a58b69"></a-box>
+
             <!-- Stolpe -->
-            <a-box position="-9 0 7" height="1" width="0.2" depth="0.2" color="#a58b69"></a-box>
-            <a-box position="-18 0 5" height="1" width="0.2" depth="0.2" color="#a58b69"></a-box>
-            <a-box position="20 0 9" height="1" width="0.2" depth="0.2" color="#a58b69"></a-box>
-            <a-box position="10 0 11" height="1" width="0.2" depth="0.2" color="#a58b69"></a-box>
+            <a-box position="-3 0 -7" rotation="0 25 0" height="1" width="0.2" depth="0.2" color="#a58b69"></a-box>
+            <a-box position="-10 0 8" rotation="0 45 0" height="1" width="0.2" depth="0.2" color="#a58b69"></a-box>
+            <a-box position="8 0 3" rotation="0 -50 0" height="1" width="0.2" depth="0.2" color="#a58b69"></a-box>
+            <a-box position="2 0 11" rotation="0 -15 0" height="1" width="0.2" depth="0.2" color="#a58b69"></a-box>
+        
+            <!-- Skylt -->
+            <a-box position="-3 1 -7" rotation="0 25 0" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
+            <a-box position="-10 1 8" rotation="0 45 0" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
+            <a-box position="8 1 3" rotation="0 -50 0" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
+            <a-box position="2 1 11" rotation="0 -15 0" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
         </a-entity>
 
         <a-entity id="coins">
@@ -130,7 +178,7 @@
             <a-cylinder position="10 0.4 10" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
             <a-cylinder position="-16 0.4 4" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
             <a-cylinder position="1 0.4 -11" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
-            <a-cylinder position="2 0.4 11" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
+            <a-cylinder position="3 0.4 16" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
             <a-cylinder position="-3 0.4 14" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
             <a-cylinder position="-19 0.4 13" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
         </a-entity>
@@ -182,45 +230,42 @@
         <a-box position="19 1 6" height="0.8" width="1" depth="1" color="#92a25d"></a-box>
         <a-box position="14 1 -8" height="0.8" width="1" depth="1" color="#92a25d"></a-box>
         <a-box position="-20 1 15" height="0.8" width="1" depth="1" color="#92a25d"></a-box>
- 
+        <a-box position="-2 1 -12" height="0.8" width="1" depth="1" color="#92a25d"></a-box>
+
         <!-- Moln -->
         <a-box id="white1" position="2 10 1" color="white" depth="2" height="1" width="5"></a-box>
         <a-box id="white2" position="5 12 2" color="white" depth="1" height="2" width="4"></a-box>
         <a-box id="white3" position="-13 12 -5" color="white" depth="1" height="2" width="5"></a-box>
         <a-box id="white4" position="-11 10 12" color="white" depth="2" height="1" width="3"></a-box>
-        <a-box id="white5" position="-2 10 23" color="white" depth="2" height="1" width="3"></a-box>
-        <a-box id="white5" position="-7 10 19" color="white" depth="2" height="1" width="3"></a-box>
-        <a-box id="white5" position="20 10 -5" color="white" depth="2" height="1" width="3"></a-box>
+        <a-box id="white5" position="-2 10 23" color="white" depth="2.5" height="1" width="3.5"></a-box>
+        <a-box id="white6" position="-7 8 19" color="white" depth="2" height="1" width="3"></a-box>
+        <a-box id="white7" position="20 10 -5" color="white" depth="2.5" height="1" width="4"></a-box>
+        <a-box id="white8" position="-5 9 -28" color="white" depth="2" height="1" width="3"></a-box>
+        <a-box id="white9" position="-37 11 -32" color="white" depth="1" height="1.5" width="4"></a-box>
+        <a-box id="white10" position="39 10 31" color="white" depth="2.5" height="1" width="3.5"></a-box>
+        <a-box id="white11" position="11 13 -22" color="white" depth="3" height="1" width="5"></a-box>
+        <a-box id="white12" position="-22 13 -18" color="white" depth="3.5" height="1" width="4"></a-box>
 
-        <!-- Skylt "Experience"-->
-        <a-text value="Experience" position="-9 1 7.2" align="center" width="6" color="white"></a-text>
+
+        <!-- Skylttext -->
+        <a-text value="About me" position="-3 1 -6.8" rotation="0 25 0" align="center" width="6" color="white"></a-text>
+        <a-text value="Education" position="-10 1 8.2" rotation="0 45 0" align="center" width="6" color="white"></a-text>
+        <a-text value="Experience" position="8 1 3.2" rotation="0 -50 0" align="center" width="6" color="white"></a-text>
+        <a-text value="More" position="2 1 11.2" rotation="0 -15 0" align="center" width="6" color="white"></a-text>
         
-        <!-- Skylten -->
-        <a-box position="-9 1 7" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
-
-        <!-- Skylt "Education"-->
-        <a-text value="Education" position="-18 1 5.2" align="center" width="6" color="white"></a-text>
-        
-        <!-- Skylten -->
-        <a-box position="-18 1 5" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
-
-        <!-- Skylt "Other"-->
-        <a-text value="Other" position="20 1 9.2" align="center" width="6" color="white"></a-text>
-        
-        <!-- Skylten -->
-        <a-box position="20 1 9" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
-
-        <!-- Skylt "Summary"-->
-        <a-text value="Summary" position="10 1 11.2" align="center" width="6" color="white"></a-text>
-        
-        <!-- Skylten -->
-        <a-box position="10 1 11" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
-
         <!-- Sand -->
         <a-circle position="-7 0.01 -1" rotation="-90 0 0" radius="4.5" color="#e6cca9"></a-circle>
 
         <!-- Mark -->
         <a-plane id="groundplane" rotation="-90 0 0" width="50" height="50" color="#c8d796"></a-plane>  
+    
+        <!-- Områden -->
+        <a-entity id="places">
+            <a-box id="aboutMe" position="-6 0 -9" material="opacity:0" depth="7" height="7" width="7"></a-box>
+            <a-box id="education" position="-13 0 5" material="opacity:0" depth="7" height="7" width="7"></a-box>
+            <a-box id="experience" position="8 0 3" material="opacity:0" depth="7" height="7" width="7"></a-box>
+            <a-box id="more" position="2 0 11" material="opacity:0" depth="7" height="7" width="7"></a-box>    
+        </a-entity>   
     </a-scene>
 </body>
 
