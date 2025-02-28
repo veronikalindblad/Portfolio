@@ -18,34 +18,35 @@
     <a-scene>
         <!-- Spelaren med Kamera -->
         <a-entity id="player" position="0 0 -5" look-controls="enabled:true" wasd-controls="enabled:false">
-            <a-box id="playerBody" position="0 0 0" rotation="0 180 0" 
-            depth="0.05" height="0.05" width="0.05">
+            <a-box id="playerBody" material="opacity:0" position="0 0 0" rotation="0 180 0" 
+            depth="1" height="1" width="0.6">
                 <a-entity id="dog" position="0 0.5 0">
                     <!-- Dog body - main rectangle -->
-                    <a-box id="playerBody" position="0 0.25 0" color="brown" depth="0.8" height="0.5" width="0.5"></a-box>
+                    <a-box id="playerBody" position="0 0.2 0" color="#bb986a" depth="0.85" height="0.45" width="0.55"></a-box>
                     
                     <!-- Dog head -->
-                    <a-box id="playerHead" position="0 0.65 0.3" color="tan" depth="0.4" height="0.4" width="0.4"></a-box>
+                    <a-box id="playerHead" position="0 0.65 0.3" color="#c8a271" depth="0.4" height="0.3" width="0.4"></a-box>
                     
                     <!-- Dog ears -->
-                    <a-box id="leftEar" position="-0.25 0.9 0.3" color="brown" depth="0.1" height="0.2" width="0.1" rotation="0 0 -15"></a-box>
-                    <a-box id="rightEar" position="0.25 0.9 0.3" color="brown" depth="0.1" height="0.2" width="0.1" rotation="0 0 15"></a-box>
+                    <a-box id="leftEar" position="-0.25 0.8 0.3" color="white" depth="0.1" height="0.2" width="0.1" rotation="0 0 -15"></a-box>
+                    <a-box id="rightEar" position="0.25 0.8 0.3" color="#c8a271" depth="0.1" height="0.2" width="0.1" rotation="0 0 15"></a-box>
                     
                     <!-- Dog snout -->
-                    <a-box id="snout" position="0 0.55 0.55" color="black" depth="0.2" height="0.2" width="0.25"></a-box>
-                    
+                    <a-box id="snout" position="0 0.55 0.58" color="black" depth="0.06" height="0.06" width="0.06"></a-box>
+                    <a-box id="snoutbase" position="0 0.55 0.55" color="white" depth="0.1" height="0.1" width="0.2"></a-box>
+
                     <!-- Dog eyes -->
-                    <a-sphere id="leftEye" position="-0.1 0.75 0.5" color="black" radius="0.05"></a-sphere>
-                    <a-sphere id="rightEye" position="0.1 0.75 0.5" color="black" radius="0.05"></a-sphere>
+                    <a-sphere id="leftEye" position="-0.1 0.65 0.5" color="black" radius="0.02"></a-sphere>
+                    <a-sphere id="rightEye" position="0.1 0.65 0.5" color="black" radius="0.02"></a-sphere>
                     
                     <!-- Dog legs -->
-                    <a-box id="frontLeftLeg" position="-0.2 -0.1 0.2" color="brown" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
-                    <a-box id="frontRightLeg" position="0.2 -0.1 0.2" color="brown" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
-                    <a-box id="backLeftLeg" position="-0.2 -0.1 -0.2" color="brown" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
-                    <a-box id="backRightLeg" position="0.2 -0.1 -0.2" color="brown" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
+                    <a-box id="frontLeftLeg" position="-0.2 -0.1 0.2" color="#c8a271" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
+                    <a-box id="frontRightLeg" position="0.2 -0.1 0.2" color="white" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
+                    <a-box id="backLeftLeg" position="-0.2 -0.1 -0.2" color="white" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
+                    <a-box id="backRightLeg" position="0.2 -0.1 -0.2" color="#c8a271" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
                     
                     <!-- Dog tail -->
-                    <a-box id="tail" position="0 0.3 -0.5" color="brown" depth="0.1" height="0.1" width="0.1" rotation="20 0 0"></a-box>
+                    <a-box id="tail" position="0 0.3 -0.5" color="black" depth="0.1" height="0.25" width="0.1" rotation="20 0 0"></a-box>
                 </a-entity>
             </a-box>
             <a-entity camera position="0 2.5 5" rotation="-10 0 0"></a-entity>
