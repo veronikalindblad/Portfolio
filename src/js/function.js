@@ -21,6 +21,29 @@ const keys = {
 
 // Vänta på att hela dokumentet och A-Frame är redo
 document.addEventListener("DOMContentLoaded", () => {
+      
+      // Genererar slumpmässig siffra
+      function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      
+      // Genererar slumpmässig grå
+      function randomGrayShade() {
+        const shade = randomInt(100, 200).toString(16);
+        return `#${shade}${shade}${shade}`;
+      }
+      
+      // Hämtar alla hus
+      const houses = document.querySelectorAll('.house');
+      const windowsContainer = document.getElementById('windows');
+      
+      // Varje hus
+      houses.forEach(house => {
+        // Slumpmässig färg
+        const grayShade = randomGrayShade();
+        house.setAttribute('color', grayShade);
+        
+      });
     
     // Hämta spelare och kameran
     const scene = document.querySelector("a-scene");
@@ -69,8 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if(place) {
             const info = document.getElementById(place.id + "Info");
             if (info && info.getAttribute("visible") == false) {
-                console.log(info);
                 placessound.play();
+                hideSigns();
                 info.setAttribute("visible", "true");
                 var signTimer = setTimeout(() => {
                     info.parentNode.removeChild(info);
@@ -120,8 +143,29 @@ document.addEventListener("DOMContentLoaded", () => {
         if (playerRot >= 0)
             playerBody.setAttribute("rotation", `0 ${playerRot} 0`);
 
-        if(collideWithSolids(player, playerBody))
+        const houseCollision = collideWithHouses(player, playerBody);
+        if(houseCollision || collideWithSolids(player, playerBody))
             player.setAttribute("position", `${oldPlayerX} 0 ${oldPlayerZ}`);
+
+        if(houseCollision) {
+            const outsideHouse = document.getElementById("outsideHouse");
+            if (outsideHouse && outsideHouse.getAttribute("visible") == false) {
+                placessound.play();
+                hideSigns();
+                outsideHouse.setAttribute("visible", "true");
+                var signTimer = setTimeout(() => {
+                    outsideHouse.setAttribute("visible", "false");    
+                    return;
+                    }, 
+                    5000
+                );    
+            }    
+        }
+
+        if(player.getAttribute("position").x != oldPlayerX || player.getAttribute("position").z != oldPlayerZ) {
+            outsideHouse.setAttribute("visible", "false");
+        }
+
         theCoin = collideWithCoins(player, playerBody);
         if (theCoin) {
             coins = document.getElementById("coins");
@@ -155,6 +199,10 @@ function rotateCoins() {
 
 function collideWithSolids(player, playerBody) {
     return collideWithBoxes(player, playerBody, "solids");
+}
+
+function collideWithHouses(player, playerBody) {
+    return collideWithBoxes(player, playerBody, "houses");
 }
 
 function collideWithSlows(player, playerBody) {
@@ -293,6 +341,8 @@ function setupDogAnimation() {
                 startBounceAnimation();
             }
         }
+        if(event.key === ' ')
+            spacePressed();
     });
     
     document.addEventListener("keyup", (event) => {
@@ -307,6 +357,18 @@ function setupDogAnimation() {
         }
     });
     
+    function spacePressed() {
+        const outsideHouse = document.getElementById("outsideHouse");
+        const insideHouse = document.getElementById("insideHouse");
+        if(outsideHouse.getAttribute("visible") == true) {
+            hideSigns();
+            insideHouse.setAttribute("visible", "true");
+            outsideHouse.setAttribute("visible", "false");
+        }
+        else if(insideHouse.getAttribute("visible") == true)
+            hideSigns(); 
+    }
+
     function startBounceAnimation() {
         // Stoppa animation
         stopBounceAnimation();
@@ -377,4 +439,13 @@ function setupDogAnimation() {
             backRightLeg.setAttribute("position", `${backRightLeg.getAttribute("position").x} ${legOriginalY.backRightLeg} ${backRightLeg.getAttribute("position").z}`);
         }
     }
+}
+
+//skyltar
+function hideSigns() {
+    const signs = document.getElementById("signs");
+    console.log(signs.children);
+    Array.from(signs.children).forEach(sign => {
+        sign.setAttribute("visible", "false");
+    });
 }
