@@ -5,6 +5,7 @@ function redirectToCity() {
 var coinCount = 0;
 const lakesound = new Audio("../media/lake.wav");
 const coinsound = new Audio("../media/coin.wav");
+const slowssound = new Audio("../media/slows.wav");
 
 // Vänta på att hela dokumentet och A-Frame är redo
 document.addEventListener("DOMContentLoaded", () => {
@@ -45,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(collideWithSlows(player, playerBody)) {
             vx /= 2;
             vz /= 2;
+            slowssound.play();
         }
         
         if(collideWithLake(player, playerBody)) {
@@ -54,8 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if(collideWithRoads(player, playerBody)) {
-            vx *= 2;
-            vz *= 2;
+            vx *= 1.3;
+            vz *= 1.3;
         }
 
         if (keys.ArrowUp)    { playerX -= vx; playerZ -= vz; }
@@ -69,6 +71,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Uppdatera spelarens position
         player.setAttribute("position", `${playerX} 0 ${playerZ}`);
+        // Uppdatera spelarens riktning
+        const playerAngles = {
+            true: { // Up
+                true: { // Up + Down
+                    true: { true: -1, false: -1 },
+                    false: { true: -1, false: -1 }
+                },
+                false: { // Up + not Down
+                    true: { true: -1, false: 225 }, // Up and Left
+                    false: { true: 135, false: 180 } // Up and Right, only Up
+                }
+            },
+            false: { // not Up
+                true: { // not Up + Down
+                    true: { true: -1, false: 315 }, // Down + Left
+                    false: { true: 45, false: 0 } // Down + Right, only Down
+                },
+                false: { // not Up + not Down
+                    true: { true: -1, false: 270 }, // only Left
+                    false: { true: 90, false: -2 } // only Right
+                }
+            },
+        }
+        playerRot = playerAngles[keys.ArrowUp][keys.ArrowDown][keys.ArrowLeft][keys.ArrowRight];
+        console.log(playerRot);
+        if (playerRot >= 0)
+            playerBody.setAttribute("rotation", `0 ${playerRot} 0`);
+
         if(collideWithSolids(player, playerBody))
             player.setAttribute("position", `${oldPlayerX} 0 ${oldPlayerZ}`);
         theCoin = collideWithCoins(player, playerBody);
@@ -77,12 +107,14 @@ document.addEventListener("DOMContentLoaded", () => {
             coins.removeChild(theCoin);
             coinCount += 1; 
             const coinCounter = document.getElementById("coinCounter");
-            coinCounter.setAttribute('text', 'value', 'Coins: ' + coinCount);
+            coinCounter.setAttribute('text', 'value', coinCount);
             coinsound.play();
         }
         const infoBox = document.getElementById("infoBox");
         if(playerX != oldPlayerX || playerZ != oldPlayerZ)
             infoBox.setAttribute("visible", "false");
+
+        rotateCoins();
 
         requestAnimationFrame(update);
     }
@@ -90,6 +122,15 @@ document.addEventListener("DOMContentLoaded", () => {
     update();
 });
 
+var rot = 0;
+function rotateCoins() {
+    coins = document.getElementById("coins");
+    rot += 2;
+    for(let i=0; i<coins.children.length; i++) {
+        let coin = coins.children.item(i);
+        coin.setAttribute("rotation", `90 ${rot} 0`);
+    }
+}
 
 function collideWithSolids(player, playerBody) {
     return collideWithBoxes(player, playerBody, "solids");
@@ -178,9 +219,6 @@ function collideWithLake(player, playerBody) {
 
 function collideWithCircle(player, playerBody, circle) {
     const radius = parseFloat(circle.getAttribute("radius"));
-    //console.log(circle);
-    //console.log(circle.getAttribute("radius"));
-    //console.log(radius);
     const playerPos = player.getAttribute("position");
     const circlePos = circle.getAttribute("position");
     
