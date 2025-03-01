@@ -3,6 +3,12 @@ function redirectToCity() {
 }
 
 var coinCount = 0;
+var totalHouses = 0;      
+var visitedHouses = 0;
+var houseVisited = {}; 
+var activeHouse = null;
+var isSpacePressed = false;
+var isSpaceReleased = false;
 const lakesound = new Audio("../media/lake.wav");
 const coinsound = new Audio("../media/coin.wav");
 const slowssound = new Audio("../media/slows.wav");
@@ -96,11 +102,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 hideSigns();
                 info.setAttribute("visible", "true");
                 var signTimer = setTimeout(() => {
-                    info.parentNode.removeChild(info);
-                    place.parentNode.removeChild(place);    
+                    const info = document.getElementById(place.id + "Info");
+                    if (info && info.parentNode)
+                        info.parentNode.removeChild(info);
+                    if (place && place.parentNode)
+                        place.parentNode.removeChild(place);
                     return;
                     }, 
-                    5000
+                    4000
                 );    
             }    
         }
@@ -148,18 +157,24 @@ document.addEventListener("DOMContentLoaded", () => {
             player.setAttribute("position", `${oldPlayerX} 0 ${oldPlayerZ}`);
 
         if(houseCollision) {
+            activeHouse = houseCollision;
             const outsideHouse = document.getElementById("outsideHouse");
             if (outsideHouse && outsideHouse.getAttribute("visible") == false) {
                 placessound.play();
                 hideSigns();
                 outsideHouse.setAttribute("visible", "true");
                 var signTimer = setTimeout(() => {
-                    outsideHouse.setAttribute("visible", "false");    
+                    outsideHouse.setAttribute("visible", "false");
+                    activeHouse = null;
                     return;
                     }, 
                     5000
                 );    
             }    
+        }    
+
+        if(isSpacePressed) {
+            spacePressed(activeHouse);
         }
 
         if(player.getAttribute("position").x != oldPlayerX || player.getAttribute("position").z != oldPlayerZ) {
@@ -183,6 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         requestAnimationFrame(update);
     }
+    setupHouseProgressBar();
     setupDogAnimation();
     update();
 });
@@ -342,7 +358,7 @@ function setupDogAnimation() {
             }
         }
         if(event.key === ' ')
-            spacePressed();
+            isSpacePressed = true;
     });
     
     document.addEventListener("keyup", (event) => {
@@ -355,20 +371,11 @@ function setupDogAnimation() {
                 stopBounceAnimation();
             }
         }
+        if(event.key === ' ')
+            isSpacePressed = false;
+            isSpaceReleased = true;
     });
     
-    function spacePressed() {
-        const outsideHouse = document.getElementById("outsideHouse");
-        const insideHouse = document.getElementById("insideHouse");
-        if(outsideHouse.getAttribute("visible") == true) {
-            hideSigns();
-            insideHouse.setAttribute("visible", "true");
-            outsideHouse.setAttribute("visible", "false");
-        }
-        else if(insideHouse.getAttribute("visible") == true)
-            hideSigns(); 
-    }
-
     function startBounceAnimation() {
         // Stoppa animation
         stopBounceAnimation();
@@ -441,11 +448,142 @@ function setupDogAnimation() {
     }
 }
 
+function spacePressed(house) {
+    const outsideHouse = document.getElementById("outsideHouse");
+    const insideHouse = document.getElementById("insideHouse");
+    if(outsideHouse.getAttribute("visible") == true) {
+        isSpaceReleased = false;
+        hideSigns();
+        insideHouse.setAttribute("visible", "true");
+        var housedescription="value:" + house.getAttribute("xtext");
+        housedescription+="\n\nDo you want to exit? Press the Space key."
+        console.log(house);
+        insideHouse.setAttribute("text", housedescription);
+        outsideHouse.setAttribute("visible", "false");
+        updateHouseProgress(house);
+    }
+    else if(isSpaceReleased && insideHouse.getAttribute("visible") == true)
+        hideSigns(); 
+}
+
 //skyltar
 function hideSigns() {
     const signs = document.getElementById("signs");
-    console.log(signs.children);
     Array.from(signs.children).forEach(sign => {
         sign.setAttribute("visible", "false");
     });
+}
+
+// Progress bar
+function setupHouseProgressBar() {
+    // Count total houses
+    const houses = document.querySelectorAll('.house');
+    totalHouses = houses.length;
+    
+    // Initialize the array to track visited houses
+    houseVisited = new Array(totalHouses).fill(false);
+    
+    // Create progress bar in the UI
+    const scene = document.querySelector('a-scene');
+    
+    // Create container entity
+    const progressContainer = document.createElement('a-entity');
+    progressContainer.setAttribute('id', 'progressContainer');
+    progressContainer.setAttribute('position', '0 2.2 -3'); // Position at top middle, relative to camera
+    progressContainer.setAttribute('rotation', '0 0 0');
+    progressContainer.setAttribute('scale', '1 1 1');
+    
+    // Create background for progress bar
+    const progressBackground = document.createElement('a-plane');
+    progressBackground.setAttribute('color', 'white');
+    progressBackground.setAttribute('width', '2');
+    progressBackground.setAttribute('height', '0.4');
+    progressBackground.setAttribute('opacity', '1');
+    progressContainer.appendChild(progressBackground);
+    
+    // Create the progress bar itself
+    const progressBar = document.createElement('a-plane');
+    progressBar.setAttribute('id', 'progressBar');
+    progressBar.setAttribute('color', 'yellow');
+    progressBar.setAttribute('width', '0'); // Start at 0 width
+    progressBar.setAttribute('height', '0.3');
+    progressBar.setAttribute('position', '-0.6 0 0.01'); // Align left
+    progressBar.setAttribute('shader', 'flat');
+    progressContainer.appendChild(progressBar);
+    
+    // Add text to show progress
+    const progressText = document.createElement('a-text');
+    progressText.setAttribute('id', 'progressText');
+    progressText.setAttribute('value', 'Houses: 0/' + totalHouses);
+    progressText.setAttribute('color', 'black');
+    progressText.setAttribute('align', 'center');
+    progressText.setAttribute('position', '0 0 0.02');
+    progressText.setAttribute('width', '4');
+    progressContainer.appendChild(progressText);
+    
+    // Add the progress container to the camera
+    const camera = document.querySelector('[camera]');
+    camera.appendChild(progressContainer);
+}
+
+// Add this function to update the progress bar
+function updateHouseProgress(house) {
+    houseId = house.getAttribute("data-house-id");
+    console.log(houseId);
+    if (!houseVisited[houseId]) {
+        houseVisited[houseId] = true;
+        visitedHouses++;
+        
+        // Update progress bar
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        // Calculate width based on progress (1.2 is full width from background)
+        const progressWidth = (visitedHouses / totalHouses) * 1.2;
+        
+        // Update progress bar width and position
+        progressBar.setAttribute('width', progressWidth);
+        progressBar.setAttribute('position', (-0.6 + progressWidth/2) + ' 0 0.01');
+        
+        // Update text
+        progressText.setAttribute('value', 'Houses: ' + visitedHouses + '/' + totalHouses);
+        
+        // Add celebration effect when all houses are visited
+        if (visitedHouses === totalHouses) {
+            showCompletionMessage();
+        }
+    }
+}
+
+// Add this function to show a completion message
+function showCompletionMessage() {
+    // Create a congratulation message
+    const scene = document.querySelector('a-scene');
+    const message = document.createElement('a-entity');
+    message.setAttribute('id', 'completionMessage');
+    message.setAttribute('position', '0 1.5 -2');
+    message.setAttribute('text', {
+        value: 'Congratulations!\nYou visited all houses!',
+        color: 'black',
+        align: 'center',
+        width: 5,
+        wrapCount: 25
+    });
+    
+    // Add background for better visibility
+    const msgBackground = document.createElement('a-plane');
+    msgBackground.setAttribute('color', 'white');
+    msgBackground.setAttribute('width', '2.5');
+    msgBackground.setAttribute('height', '0.8');
+    msgBackground.setAttribute('opacity', '1');
+    msgBackground.setAttribute('position', '0 0 -0.01');
+    message.appendChild(msgBackground);
+    
+    // Add to scene
+    scene.appendChild(message);
+    
+    // Remove after 5 seconds
+    setTimeout(() => {
+        scene.removeChild(message);
+    }, 5000);
 }
