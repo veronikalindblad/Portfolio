@@ -9,6 +9,8 @@ var houseVisited = {};
 var activeHouse = null;
 var isSpacePressed = false;
 var isSpaceReleased = false;
+var inSlow = false;
+var inLake = false;
 const lakesound = new Audio("../media/lake.wav");
 const coinsound = new Audio("../media/coin.wav");
 const slowssound = new Audio("../media/slows.wav");
@@ -77,17 +79,22 @@ document.addEventListener("DOMContentLoaded", () => {
         oldPlayerZ = playerZ;
         vx = speed * Math.sin(playerR/57.296);
         vz = speed * Math.cos(playerR/57.296);
+        
         if(collideWithSlows(player, playerBody)) {
             vx /= 2;
             vz /= 2;
-            slowssound.play();
-        }
+            if(!inSlow)
+                slowssound.play();
+            inSlow = true;
+        } else inSlow = false;
         
         if(collideWithLake(player, playerBody)) {
             vx /= 2;
             vz /= 2;
-            lakesound.play();
-        }
+            if(!inLake)
+                lakesound.play();
+            inLake = true;
+        } else inLake = false;
 
         if(collideWithRoads(player, playerBody)) {
             vx *= 1.3;
