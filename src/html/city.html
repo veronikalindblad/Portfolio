@@ -16,41 +16,44 @@
 
 <body>
     <a-scene>
-        <!-- Spelaren med Kamera -->
+        <!-- Hund, Kamera, info -->
         <a-entity id="player" position="0 0 -5" look-controls="enabled:true" wasd-controls="enabled:false">
             <a-box id="playerBody" material="opacity:0" position="0 0 0" rotation="0 0 0" 
             depth="1" height="1" width="0.6">
                 <a-entity id="dog" position="0 0.2 0">
-                    <!-- Dog body - main rectangle -->
+                    <!-- Hund kropp -->
                     <a-box id="playerBody" position="0 0.2 0" color="#bb986a" depth="0.85" height="0.45" width="0.55"></a-box>
                     
-                    <!-- Dog head -->
+                    <!-- Hund huvud -->
                     <a-box id="playerHead" position="0 0.65 0.3" color="#c8a271" depth="0.4" height="0.3" width="0.4"></a-box>
                     
-                    <!-- Dog ears -->
+                    <!-- Hund öron -->
                     <a-box id="leftEar" position="-0.25 0.8 0.3" color="white" depth="0.1" height="0.2" width="0.1" rotation="0 0 -15"></a-box>
                     <a-box id="rightEar" position="0.25 0.8 0.3" color="#c8a271" depth="0.1" height="0.2" width="0.1" rotation="0 0 15"></a-box>
                     
-                    <!-- Dog snout -->
+                    <!-- Hund nos -->
                     <a-box id="snout" position="0 0.55 0.58" color="black" depth="0.06" height="0.06" width="0.06"></a-box>
                     <a-box id="snoutbase" position="0 0.55 0.55" color="white" depth="0.1" height="0.1" width="0.2"></a-box>
 
-                    <!-- Dog eyes -->
+                    <!-- Hund ögon -->
                     <a-sphere id="leftEye" position="-0.1 0.65 0.5" color="black" radius="0.02"></a-sphere>
                     <a-sphere id="rightEye" position="0.1 0.65 0.5" color="black" radius="0.02"></a-sphere>
                     
-                    <!-- Dog legs -->
+                    <!-- Hund ben -->
                     <a-box id="frontLeftLeg" position="-0.2 -0.1 0.2" color="#c8a271" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
                     <a-box id="frontRightLeg" position="0.2 -0.1 0.2" color="white" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
                     <a-box id="backLeftLeg" position="-0.2 -0.1 -0.2" color="white" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
                     <a-box id="backRightLeg" position="0.2 -0.1 -0.2" color="#c8a271" depth="0.1" height="0.3" width="0.1" class="leg"></a-box>
                     
-                    <!-- Dog tail -->
+                    <!-- Hund svans -->
                     <a-box id="tail" position="0 0.3 -0.5" color="black" depth="0.1" height="0.25" width="0.1" rotation="20 0 0"></a-box>
                 </a-entity>
             </a-box>
+            
+            <!-- Kamera -->
             <a-entity camera position="0 2.5 5" rotation="-10 0 0"></a-entity>
         
+            <!-- Mynt räknare -->
             <a-entity id="coinCounter"
                 position="1.9 3.36 3"
                 rotation="-10 0 0" 
@@ -62,6 +65,7 @@
             </a-entity>
 
             <a-entity id="signs">
+                <!-- Startinfo -->
                 <a-entity id="infoBox"
                     position="0 2.5 3"
                     rotation="-10 0 0"
@@ -72,6 +76,7 @@
                     look-at="[camera]">
                 </a-entity>
 
+                <!-- Utanför hus info -->
                 <a-entity id="outsideHouse"
                     position="0 2.5 3"
                     rotation="-10 0 0"  
@@ -82,6 +87,7 @@
                     look-at="[camera]">
                 </a-entity>
 
+                <!-- Inuti hus info -->
                 <a-entity id="insideHouse"
                     position="0 2.5 4"
                     rotation="-10 0 0"  
@@ -135,40 +141,45 @@
             </a-entity>
         </a-entity>
 
+        <!-- Hus -->
         <a-entity id="houses">
-            <!-- Hus -->
             <a-box position="2 0 0" depth="0.5" height="3.5" width="1.2" class="house" data-house-id="1" xtext="Welcome to my interactive CV! Explore my world to learn more about me."></a-box>
-            <a-box position="4 0 4" depth="0.5" height="1.5" width="1" class="house" data-house-id="2" xtext="Hej! Experience."></a-box>
-            <a-box position="-8 0 -7" depth="0.5" height="4" width="1" class="house" data-house-id="3" xtext="Hej! About Me."></a-box>
-            <a-box position="-11 0 -12" depth="0.5" height="2" width="0.5" class="house" data-house-id="4" xtext="Hej! About Me."></a-box>
-            <a-box position="-18 0 4" depth="0.5" height="2" width="1.5" class="house" data-house-id="5" xtext="Hej! Education."></a-box>
-            <a-box position="-16 0 0.5" depth="0.5" height="2.5" width="0.5" class="house" data-house-id="6" xtext="Hej! Education."></a-box>
-            <a-box position="-16 0 -1" depth="0.5" height="2" width="0.5" class="house" data-house-id="7" xtext="Hej! Education."></a-box>
-            <a-box position="20 0 3" depth="0.5" height="1.5" width="0.5" class="house" data-house-id="8" xtext="Hej! Experience."></a-box>
-            <a-box position="-17 0 9" depth="0.5" height="2" width="1" class="house" data-house-id="9" xtext="Hej! Education."></a-box>
-            <a-box position="19 0 1" depth="0.5" height="2" width="1.5" class="house" data-house-id="10" xtext="Hej! Experience."></a-box>
-            <a-box position="-15 0 -3" depth="0.5" height="5" width="1" class="house" data-house-id="11" xtext="Hej! Education."></a-box>
-            <a-box position="17 0 4" depth="0.5" height="4" width="0.5" class="house" data-house-id="12" xtext="Hej! Experience."></a-box>
-            <a-box position="-11 0 4" depth="0.5" height="2" width="1" class="house" data-house-id="13" xtext="Hej! Education."></a-box>
-            <a-box position="-6 0 -9" depth="0.5" height="2" width="1" class="house" data-house-id="14" xtext="Hej! About Me."></a-box>
-            <a-box position="-12 0 3" depth="0.5" height="2" width="0.7" class="house" data-house-id="15" xtext="Hej! Education."></a-box>
-            <a-box position="-2 0 19" depth="0.5" height="3" width="1" class="house" data-house-id="16" xtext="Hej! More."></a-box>
-            <a-box position="-3 0 15" depth="0.5" height="1.5" width="0.5" class="house" data-house-id="17" xtext="Hej! More."></a-box>
-            <a-box position="17 0 -13" depth="0.5" height="2" width="1" class="house" data-house-id="18" xtext="Hej! About Me."></a-box>
-            <a-box position="13 0 9" depth="0.5" height="2" width="1.5" class="house" data-house-id="19" xtext="Hej! Experience."></a-box>
-            <a-box position="-11 0 -8" depth="0.5" height="2" width="1" class="house" data-house-id="20" xtext="Hej! About Me."></a-box>
-            <a-box position="-6 0 -12" depth="0.5" height="3" width="1.5" class="house" data-house-id="21" xtext="Hej! About Me."></a-box>
-            <a-box position="-2 0 14" depth="0.5" height="2.5" width="0.5" class="house" data-house-id="22" xtext="Hej! More."></a-box>
-            <a-box position="-3 0 11" depth="0.5" height="4" width="1" class="house" data-house-id="23" xtext="Hej! More."></a-box>
-            <a-box position="12 0 3" depth="0.5" height="2" width="0.5" class="house" data-house-id="24" xtext="Hej! Experience."></a-box>
-            <a-box position="2 0 14" depth="0.5" height="1" width="1" class="house" data-house-id="25" xtext="Hej! More."></a-box>
-            <a-box position="6 0 17" depth="0.5" height="2" width="0.5" class="house" data-house-id="26" xtext="Hej! More."></a-box>
-            <a-box position="4 0 -12" depth="1" height="3" width="1" class="house" data-house-id="27" xtext="Hej! About Me."></a-box>
-            <a-box position="18 0 -2" depth="0.5" height="5" width="1" class="house" data-house-id="28" xtext="Hej! Experience."></a-box>
-            <a-box position="10 0 -14" depth="0.5" height="4" width="1" class="house" data-house-id="29" xtext="Hej! About Me."></a-box>
-            <a-box position="4 0 10" depth="0.5" height="2" width="0.5" class="house" data-house-id="30" xtext="Hej! More."></a-box>
+            
+            <a-box position="-8 0 -7" depth="0.5" height="4" width="1" class="house" data-house-id="3" xtext="I love music and playing instruments. I play piano, ukulele, drums, guitar and sing!"></a-box>
+            <a-box position="-11 0 -12" depth="0.5" height="2" width="0.5" class="house" data-house-id="4" xtext="I am passionate about animal rights."></a-box>
+            <a-box position="-6 0 -9" depth="0.5" height="2" width="1" class="house" data-house-id="14" xtext="My favorit animal are dogs."></a-box>
+            <a-box position="17 0 -13" depth="0.5" height="2" width="1" class="house" data-house-id="18" xtext="My favorit dog breed is the Dansk- Svensk gardshund."></a-box>
+            <a-box position="-11 0 -8" depth="0.5" height="2" width="1" class="house" data-house-id="20" xtext="I love to connect with people and enjoy the student life with my friends."></a-box>
+            <a-box position="-6 0 -12" depth="0.5" height="3" width="1.5" class="house" data-house-id="21" xtext="I love keeping busy and having a lot going on at the same time."></a-box>
+            <a-box position="4 0 -12" depth="1" height="3" width="1" class="house" data-house-id="27" xtext="My biggest pet peeve is sloppiness. I like things organized!"></a-box>
+            <a-box position="10 0 -14" depth="0.5" height="4" width="1" class="house" data-house-id="29" xtext="About Me."></a-box>
+
+            <a-box position="4 0 4" depth="0.5" height="1.5" width="1" class="house" data-house-id="2" xtext="Experience."></a-box>
+            <a-box position="17 0 4" depth="0.5" height="4" width="0.5" class="house" data-house-id="12" xtext="Experience."></a-box>
+            <a-box position="20 0 3" depth="0.5" height="1.5" width="0.5" class="house" data-house-id="8" xtext="Experience."></a-box>
+            <a-box position="19 0 1" depth="0.5" height="2" width="1.5" class="house" data-house-id="10" xtext="At I have learned ."></a-box>
+            <a-box position="13 0 9" depth="0.5" height="2" width="1.5" class="house" data-house-id="19" xtext="At I have learned ."></a-box>
+            <a-box position="12 0 3" depth="0.5" height="2" width="0.5" class="house" data-house-id="24" xtext="At I have learned ."></a-box>
+            <a-box position="18 0 -2" depth="0.5" height="5" width="1" class="house" data-house-id="28" xtext="At I have learned ."></a-box>
+
+            <a-box position="-18 0 4" depth="0.5" height="2" width="1.5" class="house" data-house-id="5" xtext="I am in my final year of the Marketing Communication and IT program at Stockholm University."></a-box>
+            <a-box position="-16 0 0.5" depth="0.5" height="2.5" width="0.5" class="house" data-house-id="6" xtext="I attended the Natural Science program, specializing in Natural Sciences with a focus on Research at Norra Reals gymnasium."></a-box>
+            <a-box position="-16 0 -1" depth="0.5" height="2" width="0.5" class="house" data-house-id="7" xtext="I have completed training in responsible alcohol service by STAD."></a-box>
+            <a-box position="-17 0 9" depth="0.5" height="2" width="1" class="house" data-house-id="9" xtext="At Stockholm University I have learned ."></a-box>
+            <a-box position="-15 0 -3" depth="0.5" height="5" width="1" class="house" data-house-id="11" xtext="At Stockholm University I have learned ."></a-box>
+            <a-box position="-11 0 4" depth="0.5" height="2" width="1" class="house" data-house-id="13" xtext="At Stockholm University I have learned ."></a-box>
+            <a-box position="-12 0 3" depth="0.5" height="2" width="0.7" class="house" data-house-id="15" xtext="At Stockholm University I have learned ."></a-box>
+            
+            <a-box position="-2 0 19" depth="0.5" height="3" width="1" class="house" data-house-id="16" xtext="I have received Novastipendiet 2020 for fiction."></a-box>
+            <a-box position="-3 0 15" depth="0.5" height="1.5" width="0.5" class="house" data-house-id="17" xtext="I published a fictional novel 2022. Title: Arvtagaren. Publisher: Solentro."></a-box>
+            <a-box position="-2 0 14" depth="0.5" height="2.5" width="0.5" class="house" data-house-id="22" xtext="I have received Kenneth gardestadstipendiet 2018 for poetry."></a-box>
+            <a-box position="-3 0 11" depth="0.5" height="4" width="1" class="house" data-house-id="23" xtext="I am fluent in English and Swedish."></a-box>
+            <a-box position="2 0 14" depth="0.5" height="1" width="1" class="house" data-house-id="25" xtext="More."></a-box>
+            <a-box position="6 0 17" depth="0.5" height="2" width="0.5" class="house" data-house-id="26" xtext="More."></a-box>
+            <a-box position="4 0 10" depth="0.5" height="2" width="0.5" class="house" data-house-id="30" xtext="I have written manuscripts for two plays that were performed by youth actors."></a-box>
         </a-entity>
 
+        <!-- Saker man inte kan gå igenom -->
         <a-entity id="solids">
             <!-- Trädstam -->
             <a-box position="5 0 -3" height="2" width="0.3" depth="0.3" color="#a58b69"></a-box>
@@ -191,8 +202,8 @@
             <a-box position="2 1 11" rotation="0 -15 0" height="1" width="2" depth="0.1" color="#a58b69"></a-box>
         </a-entity>
 
+        <!-- Mynt -->
         <a-entity id="coins">
-            <!-- Mynt -->
             <a-cylinder position="-4 0.4 9" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
             <a-cylinder position="-9 0.4 -9" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
             <a-cylinder position="-20 0.4 0" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
@@ -209,6 +220,7 @@
             <a-cylinder position="-19 0.4 13" radius="0.3" height="0.05" color="gold" rotation="90 0 0"></a-cylinder>
         </a-entity>
 
+        <!-- Saker man går långsamt igenom -->
         <a-entity id="slows">
             <!-- Gräs -->
             <a-box id="gras1" position="11 0 9" color="#a7b47d" depth="0.3" height="0.3" width="0.3"></a-box>
@@ -232,8 +244,8 @@
             <a-box position="-19 0.02 2" height="0.8" width="0.8" depth="0.2" color="#92a25d"></a-box>
         </a-entity>
 
+        <!-- Väg -->
         <a-entity id="roads">
-            <!-- Väg -->
             <a-box position="0 0.01 5"  depth="0.5" width="30"  height="0.05" color="#a58860"></a-box>
             <a-box position="0 0.01 4.3" depth="29"  width="0.5" height="0.05" color="#a58860"></a-box>
             <a-box position="-1 0.01 -10"  depth="0.5" width="18"   height="0.05" color="#a58860"></a-box>
@@ -271,7 +283,6 @@
         <a-box id="white10" position="39 10 31" color="white" depth="2.5" height="1" width="3.5"></a-box>
         <a-box id="white11" position="11 13 -22" color="white" depth="3" height="1" width="5"></a-box>
         <a-box id="white12" position="-22 13 -18" color="white" depth="3.5" height="1" width="4"></a-box>
-
 
         <!-- Skylttext -->
         <a-text value="About me" position="-3 1 -6.8" rotation="0 25 0" align="center" width="6" color="white"></a-text>

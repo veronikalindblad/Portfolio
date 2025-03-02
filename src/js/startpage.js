@@ -1,3 +1,4 @@
+//Gesällprov Veronika Lindblad (c) 2025
 
 const cloudConfig = {
     minSize: 50,        // Min storlek
@@ -8,25 +9,29 @@ const cloudConfig = {
     maxClouds: 5,      // Max antal moln som syns
 };
 
-// Håller koll på moln
+// Lista på moln
 let activeClouds = [];
+
+// Ljud för moln som poofar
 let poofSound = new Audio('../media/poof.wav');
 
 // Startmoln
 window.addEventListener('load', () => {
-    // Börja spawna moln
+    // Starta timer för att spawna moln
     const intervalId = setInterval(createCloud, cloudConfig.spawnInterval);
     
     // Moln som finns från början
     for (let i = 0; i < 3; i++) {
+        // Spawna moln på skärmen
         createCloud(true);
     }
     
-    // Animations loop
+    // Flytta molnen loop
     requestAnimationFrame(updateClouds);
 });
 
-// Skapa moln
+// Skapa ett moln
+// Om initial är false spawnas moln utanför skärmen
 function createCloud(initial=false) {
     // Skapa inte fler moln om det är vid max
     if (activeClouds.length >= cloudConfig.maxClouds) {
@@ -37,21 +42,24 @@ function createCloud(initial=false) {
     const cloud = document.createElement('div');
     cloud.className = 'cloud';
     
-    // Randomiserar moln
+    // Randomisera molnstorlek
     var sizeX = Math.random() * (cloudConfig.maxSize - cloudConfig.minSize) + cloudConfig.minSize;
     var sizeY = Math.random() * (cloudConfig.maxSize - cloudConfig.minSize) + cloudConfig.minSize;
+    // Om molnet är högre än det är brett byts x och y storleken
     if (sizeX < sizeY) {
         sizeT = sizeX;
         sizeX = sizeY;
         sizeY = sizeT;
     }
+    // Hastighet på moln
     const speed = Math.random() * (cloudConfig.maxSpeed - cloudConfig.minSpeed) + cloudConfig.minSpeed;
     
-    // Gör att molnen börjar
+    // Gör att alla moln börjar inne på skärmen
+    // Molnen flyttas senare utanför skärmen om de inte är startmoln
     const yPosition = Math.random() * (window.innerHeight - sizeY);
     const xPosition = Math.random() * (window.innerWidth);
     
-    // Moln utseende
+    // Moln utseende och placering
     cloud.style.width = `${sizeX}px`;
     cloud.style.height = `${sizeY}px`;
     cloud.style.left = `${xPosition}px`;
@@ -73,9 +81,11 @@ function createCloud(initial=false) {
         }, 300);
     });
     
+    // Lägga till moln i DOM
     document.body.appendChild(cloud);
     
-    // Kommer ihåg molninfo för animation
+    // Lägga till moln i aktiva moln listan
+    // Moln som inte är startmoln flyttas utanför skärmen
     var position = window.innerWidth;
     if (initial) position = xPosition;
     activeClouds.push({
@@ -85,15 +95,15 @@ function createCloud(initial=false) {
     });
 }
 
-// Uppdaterar alla molns position
+// Uppdatera alla molns position
 function updateClouds(timestamp) {
     if (!updateClouds.lastTimestamp) {
         updateClouds.lastTimestamp = timestamp;
     }
-    const deltaTime = (timestamp - updateClouds.lastTimestamp) / 1000; // in seconds
+    const deltaTime = (timestamp - updateClouds.lastTimestamp) / 1000;
     updateClouds.lastTimestamp = timestamp;
     
-    // Uppdaterar ett molns position
+    // Uppdatera ett molns position
     activeClouds.forEach((cloud, index) => {
         // Move the cloud based on its speed
         cloud.position -= cloud.speed * deltaTime;
@@ -106,6 +116,6 @@ function updateClouds(timestamp) {
         }
     });
     
-    // Fortsätter animationen
+    // Fortsätta flytta moln
     requestAnimationFrame(updateClouds);
 }

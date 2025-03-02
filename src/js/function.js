@@ -1,67 +1,63 @@
-function redirectToCity() {
-    window.location.href = "../html/city.html";
-}
+//Gesällprov Veronika Lindblad (c) 2025
 
-var coinCount = 0;
-var totalHouses = 0;      
-var visitedHouses = 0;
-var houseVisited = {}; 
-var activeHouse = null;
-var isSpacePressed = false;
-var isSpaceReleased = false;
-var inSlow = false;
-var inLake = false;
-const lakesound = new Audio("../media/lake.wav");
-const coinsound = new Audio("../media/coin.wav");
-const slowssound = new Audio("../media/slows.wav");
-const placessound = new Audio("../media/places.wav");
-
-var isWalking = false;
-var bounceTimer = null;
-var bounceHeight = 0.08;
-var bounceSpeed = 150; // milliseconds
-const keys = {
+var coinCount = 0;              // Antalet samlade mynt
+var totalHouses = 0;            // Antalet hus
+var visitedHouses = 0;          // Antalet besökta hus
+var houseVisited = {};          // Vilka hus som besökts
+var activeHouse = null;         // Senaste hus som hunden kolliderat med
+var isSpacePressed = false;     // Om Space tangenten är nedtryckt
+var isSpaceReleased = false;    // Om Space tangenten är upsläppt efter att ha varit nedtryckt
+var inSlow = false;             // Om hunden är i en slow
+var inLake = false;             // Om hunden är i en sjö
+var isWalking = false;          // Om hunden går
+var bounceTimer = null;         // Timer som hjälper hundens gå animation 
+var bounceHeight = 0.08;        // Gå animationens höjd
+var bounceSpeed = 150;          // Gå animationens hastighet (i millisekunder)
+var rot = 0;                    // Myntens rotationsvinkel
+const keys = {                  // Vilka piltangenter som är nedtryckta
     ArrowUp: false,
     ArrowDown: false,
     ArrowLeft: false,
     ArrowRight: false
 };
 
-// Vänta på att hela dokumentet och A-Frame är redo
+// Ljud
+const lakesound = new Audio("../media/lake.wav");
+const coinsound = new Audio("../media/coin.wav");
+const slowssound = new Audio("../media/slows.wav");
+const placessound = new Audio("../media/places.wav");
+
+// Köra när hela dokumentet och A-Frame är redo
 document.addEventListener("DOMContentLoaded", () => {
       
-      // Genererar slumpmässig siffra
+      // Generera slumpmässig siffra
       function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
       
-      // Genererar slumpmässig grå
+      // Generera slumpmässig grå
       function randomGrayShade() {
         const shade = randomInt(100, 200).toString(16);
         return `#${shade}${shade}${shade}`;
       }
       
-      // Hämtar alla hus
+      // Hämta alla hus
       const houses = document.querySelectorAll('.house');
-      const windowsContainer = document.getElementById('windows');
       
-      // Varje hus
+      // För varje hus sätts en slumpmässig grå färg
       houses.forEach(house => {
-        // Slumpmässig färg
         const grayShade = randomGrayShade();
-        house.setAttribute('color', grayShade);
-        
+        house.setAttribute('color', grayShade);   
       });
     
-    // Hämta spelare och kameran
-    const scene = document.querySelector("a-scene");
-    const player = document.getElementById("player");
+    // Hämta hunden med kamera
     const playerBody = document.getElementById("playerBody");
 
-    // Hantera spelarens rörelse
+    // Hantera hundens startposition och hastighet
     let playerX = 0, playerZ = -5;
     const speed = 0.06;
 
+    // Registrera vilka knappar som trycks och släpps
     document.addEventListener("keydown", (event) => {
         if (event.key in keys) keys[event.key] = true;
     });
@@ -70,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.key in keys) keys[event.key] = false;
     });
 
+    // Uptadera animering av innehållet
     function update() {
         const player = document.getElementById("player");
         playerX = player.getAttribute("position").x;
@@ -77,9 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
         playerR = player.getAttribute("rotation").y;
         oldPlayerX = playerX;
         oldPlayerZ = playerZ;
+        // Hur hunden rör sig beroende på kamerans vinkel 
         vx = speed * Math.sin(playerR/57.296);
         vz = speed * Math.cos(playerR/57.296);
         
+        // Vad som händer när hunden är i en slow
         if(collideWithSlows(player, playerBody)) {
             vx /= 2;
             vz /= 2;
@@ -88,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
             inSlow = true;
         } else inSlow = false;
         
+         // Vad som händer när hunden är i en sjö
         if(collideWithLake(player, playerBody)) {
             vx /= 2;
             vz /= 2;
@@ -96,11 +96,13 @@ document.addEventListener("DOMContentLoaded", () => {
             inLake = true;
         } else inLake = false;
 
+         // Vad som händer när hunden är på en väg
         if(collideWithRoads(player, playerBody)) {
             vx *= 1.3;
             vz *= 1.3;
         }
 
+         // Vad som händer när hunden är i ett nytt område
         const place = collideWithPlaces(player, playerBody);
         if(place) {
             const info = document.getElementById(place.id + "Info");
@@ -109,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 hideSigns();
                 info.setAttribute("visible", "true");
                 var signTimer = setTimeout(() => {
+                    // Ta bort skylten för alltid efter den visats första gången
                     const info = document.getElementById(place.id + "Info");
                     if (info && info.parentNode)
                         info.parentNode.removeChild(info);
@@ -121,48 +124,61 @@ document.addEventListener("DOMContentLoaded", () => {
             }    
         }
 
+        // Översätta pilknapptryckningar till hundens rörelse
         if (keys.ArrowUp)    { playerX -= vx; playerZ -= vz; }
         if (keys.ArrowDown)  { playerX += vx; playerZ += vz; }
         if (keys.ArrowLeft)  { playerX -= vz; playerZ += vx; }
         if (keys.ArrowRight) { playerX += vz; playerZ -= vx; }
+
+        //Stoppa hunden från att gå ut från gräsmattan
         if (playerX < -23) playerX = -23;
         if (playerX >  23) playerX =  23;
         if (playerZ < -23) playerZ = -23;
         if (playerZ >  23) playerZ =  23;
 
-        // Uppdatera spelarens position
+        // Uppdatera hundens position
+        // Hunden backas senare tillbaka om den krockar med en solid
         player.setAttribute("position", `${playerX} 0 ${playerZ}`);
-        // Uppdatera spelarens riktning
+        // Uppdatera hundens rotation beroende på pilknapptryckningar
+        // Kan känna av flera pilknapptryckningar samtidigt
+        // -1 betyder en omöjlig kombination och då roteras inte hunden
         const playerAngles = {
-            true: { // Up
-                true: { // Up + Down
+            true: { // Upp
+                true: { // Upp + ner
                     true: { true: -1, false: -1 },
                     false: { true: -1, false: -1 }
                 },
-                false: { // Up + not Down
-                    true: { true: -1, false: 225 }, // Up and Left
-                    false: { true: 135, false: 180 } // Up and Right, only Up
+                false: { // Upp + inte ner
+                    true: { true: -1, false: 225 }, // Upp och vänster
+                    false: { true: 135, false: 180 } // Upp och höger, bara upp
                 }
             },
-            false: { // not Up
-                true: { // not Up + Down
-                    true: { true: -1, false: 315 }, // Down + Left
-                    false: { true: 45, false: 0 } // Down + Right, only Down
+            false: { // Inte upp
+                true: { // Inte upp + ner
+                    true: { true: -1, false: 315 }, // Ner + vänster
+                    false: { true: 45, false: 0 } // Ner + höger, bara ner
                 },
-                false: { // not Up + not Down
-                    true: { true: -1, false: 270 }, // only Left
-                    false: { true: 90, false: -2 } // only Right
+                false: { // Inte upp + inte ner
+                    true: { true: -1, false: 270 }, // Bara vänster
+                    false: { true: 90, false: -2 } // Bara höger
                 }
             },
         }
+
+        // Kolla upp hundens vinkel från info ovan
         playerRot = playerAngles[keys.ArrowUp][keys.ArrowDown][keys.ArrowLeft][keys.ArrowRight];
         if (playerRot >= 0)
+            // Sätter hundens rotation om vinkeln inte är negativ
             playerBody.setAttribute("rotation", `0 ${playerRot} 0`);
 
+        // Kollar om hunden kolliderar med ett hus eller en solid
+        // Då flyttas hunden tillbaka där den var innan
         const houseCollision = collideWithHouses(player, playerBody);
         if(houseCollision || collideWithSolids(player, playerBody))
             player.setAttribute("position", `${oldPlayerX} 0 ${oldPlayerZ}`);
 
+        // Om hunden kolliderar med ett hus visas infoskylten för utanför huset
+        // Kollisionsljudet spelas upp
         if(houseCollision) {
             activeHouse = houseCollision;
             const outsideHouse = document.getElementById("outsideHouse");
@@ -170,6 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 placessound.play();
                 hideSigns();
                 outsideHouse.setAttribute("visible", "true");
+                // Skylten tas bort efter 5 sekunder och huset är inte längre aktivt
                 var signTimer = setTimeout(() => {
                     outsideHouse.setAttribute("visible", "false");
                     activeHouse = null;
@@ -180,14 +197,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }    
         }    
 
+        // Hunden går in i huset om man tryckt på mellanslag när skylten visas
         if(isSpacePressed) {
             spacePressed(activeHouse);
         }
 
+        // Hunden går ut ur huset om man trycker på mellanslag igen
         if(player.getAttribute("position").x != oldPlayerX || player.getAttribute("position").z != oldPlayerZ) {
             outsideHouse.setAttribute("visible", "false");
         }
 
+        // Om hunden kolliderar med ett mynt så samlas det in och läggs till i mynt räknaren
+        // Kollisionsljudet spelas upp
         theCoin = collideWithCoins(player, playerBody);
         if (theCoin) {
             coins = document.getElementById("coins");
@@ -197,20 +218,30 @@ document.addEventListener("DOMContentLoaded", () => {
             coinCounter.setAttribute('text', 'value', coinCount);
             coinsound.play();
         }
+
+        // Informationsskylten som visas i början försvinner när man trycket på piltangenterna 
         const infoBox = document.getElementById("infoBox");
         if(playerX != oldPlayerX || playerZ != oldPlayerZ)
             infoBox.setAttribute("visible", "false");
-
+        
+        // Rotera mynt
         rotateCoins();
-
+        
+        // Fortsätta animationer
         requestAnimationFrame(update);
     }
+
+    // Ladda progressbar för hus
     setupHouseProgressBar();
+
+    // Starta animation av hunden 
     setupDogAnimation();
+
+    // Starta animationen av staden
     update();
 });
 
-var rot = 0;
+// Rotera mynt
 function rotateCoins() {
     coins = document.getElementById("coins");
     rot += 2;
@@ -220,6 +251,7 @@ function rotateCoins() {
     }
 }
 
+// Ta reda på om hunden kolliderar med olika typer av objekt
 function collideWithSolids(player, playerBody) {
     return collideWithBoxes(player, playerBody, "solids");
 }
@@ -240,16 +272,18 @@ function collideWithPlaces(player, playerBody) {
     return collideWithBoxes(player, playerBody, "places");
 }
 
+// Beräkna kollision med flera rätblock
 function collideWithBoxes(player, playerBody, aentity) {
     parent = document.getElementById(aentity);
     for(let i=0; i<parent.children.length; i++) {
         let box = parent.children.item(i);
         if(collideWithBox(player, playerBody, box))
-            return box
+            return box;
     }
-    return false
+    return null;  // Ingen kollision
 }
 
+// Beräkna kollision med ett rätblock
 function collideWithBox (player, playerBody, box) {
     playerX = player.getAttribute("position").x
     playerXleft = playerX - playerBody.getAttribute("width")/2
@@ -270,17 +304,18 @@ function collideWithBox (player, playerBody, box) {
     return false
 }
 
-//Mynt
+// Beräkna kollision med flera mynt
 function collideWithCoins(player, playerBody) {
     coins = document.getElementById("coins");
     for(let i=0; i<coins.children.length; i++) {
         let coin = coins.children.item(i);
         if(collideWithSphere(player, playerBody, coin))
-            return coin
+            return coin;
     }
-    return null
+    return null;
 }
 
+// Beräkna kollision med en sfär
 function collideWithSphere (player, playerBody, sphere) {
     radius = parseFloat(sphere.getAttribute("radius"));
     playerX = player.getAttribute("position").x;
@@ -304,7 +339,7 @@ function collideWithSphere (player, playerBody, sphere) {
     return false;
 }
 
-//Sjö
+// Beräkna kollision med sjö
 function collideWithLake(player, playerBody) {
     const lake = document.getElementById("lake");
     if (lake && collideWithCircle(player, playerBody, lake)) {
@@ -313,6 +348,7 @@ function collideWithLake(player, playerBody) {
     return null;
 }
 
+// Beräkna kollision med en cirkel
 function collideWithCircle(player, playerBody, circle) {
     const radius = parseFloat(circle.getAttribute("radius"));
     const playerPos = player.getAttribute("position");
@@ -337,6 +373,7 @@ function collideWithCircle(player, playerBody, circle) {
     return (dx * dx + dz * dz) < (radius * radius);
 }
 
+// Startar hund animationer vid gång
 function setupDogAnimation() {
     const player = document.getElementById("player");
     const playerBody = document.getElementById("playerBody");
@@ -345,7 +382,7 @@ function setupDogAnimation() {
     const backLeftLeg = document.getElementById("backLeftLeg");
     const backRightLeg = document.getElementById("backRightLeg");
     
-    // Orginal position
+    // Ursprunglig position
     const originalBodyY = 0.25;
     const legOriginalY = {
         frontLeftLeg: -0.1,
@@ -354,6 +391,7 @@ function setupDogAnimation() {
         backRightLeg: -0.1
     };
     
+    // Lyssna efter pilknapptryckningar
     document.addEventListener("keydown", (event) => {
         if (event.key in keys) {
             keys[event.key] = true;
@@ -364,10 +402,13 @@ function setupDogAnimation() {
                 startBounceAnimation();
             }
         }
+        
+        // Kolla om Space tangenten är nedtryckt
         if(event.key === ' ')
             isSpacePressed = true;
     });
     
+    // Kolla vilken knapp som släppts upp
     document.addEventListener("keyup", (event) => {
         if (event.key in keys) {
             keys[event.key] = false;
@@ -378,16 +419,17 @@ function setupDogAnimation() {
                 stopBounceAnimation();
             }
         }
+        // Kolla om Space har släpps upp
         if(event.key === ' ')
             isSpacePressed = false;
             isSpaceReleased = true;
     });
     
+    // Starta hundens gång animation
     function startBounceAnimation() {
         // Stoppa animation
         stopBounceAnimation();
         
-        // Påbörja aniamtion
         let goingUp = true;
         let currentY = originalBodyY;
         let step = 0;
@@ -398,7 +440,6 @@ function setupDogAnimation() {
                 return;
             }
             
-            // Body bounce
             if (goingUp) {
                 currentY += 0.04;
                 if (currentY >= originalBodyY + bounceHeight) {
@@ -411,25 +452,25 @@ function setupDogAnimation() {
                 }
             }
             
-            // Update body position
+            // Uppdatera hundens höjd
             playerBody.setAttribute("position", `0 ${currentY} 0`);
             
-            // Animate legs
+            // Animera hudens ben
             if (frontLeftLeg && frontRightLeg && backLeftLeg && backRightLeg) {
                 if (step % 2 === 0) {
-                    // First diagonal pair (front-left and back-right)
+                    // Första diagonella par (vänster fram och höger bak)
                     frontLeftLeg.setAttribute("position", `${frontLeftLeg.getAttribute("position").x} ${legOriginalY.frontLeftLeg + 0.1} ${frontLeftLeg.getAttribute("position").z}`);
                     backRightLeg.setAttribute("position", `${backRightLeg.getAttribute("position").x} ${legOriginalY.backRightLeg + 0.1} ${backRightLeg.getAttribute("position").z}`);
                     
-                    // Reset other diagonal pair
+                    // Återställa det andra diagonella paret
                     frontRightLeg.setAttribute("position", `${frontRightLeg.getAttribute("position").x} ${legOriginalY.frontRightLeg} ${frontRightLeg.getAttribute("position").z}`);
                     backLeftLeg.setAttribute("position", `${backLeftLeg.getAttribute("position").x} ${legOriginalY.backLeftLeg} ${backLeftLeg.getAttribute("position").z}`);
                 } else {
-                    // Second diagonal pair (front-right and back-left)
+                    // Andra diagonella paret (höger fram och vänster bak)
                     frontRightLeg.setAttribute("position", `${frontRightLeg.getAttribute("position").x} ${legOriginalY.frontRightLeg + 0.1} ${frontRightLeg.getAttribute("position").z}`);
                     backLeftLeg.setAttribute("position", `${backLeftLeg.getAttribute("position").x} ${legOriginalY.backLeftLeg + 0.1} ${backLeftLeg.getAttribute("position").z}`);
                     
-                    // Reset first diagonal pair
+                    // Återställa det ursprungliga diagonella paret
                     frontLeftLeg.setAttribute("position", `${frontLeftLeg.getAttribute("position").x} ${legOriginalY.frontLeftLeg} ${frontLeftLeg.getAttribute("position").z}`);
                     backRightLeg.setAttribute("position", `${backRightLeg.getAttribute("position").x} ${legOriginalY.backRightLeg} ${backRightLeg.getAttribute("position").z}`);
                 }
@@ -439,13 +480,14 @@ function setupDogAnimation() {
         }, bounceSpeed);
     }
     
+    // Stoppa hundens gång animation
     function stopBounceAnimation() {
         clearInterval(bounceTimer);
         
-        // Reset body position
+        // Återställa hundens kropp
         playerBody.setAttribute("position", `0 ${originalBodyY} 0`);
         
-        // Reset leg positions
+        // Återställa hudens ben
         if (frontLeftLeg && frontRightLeg && backLeftLeg && backRightLeg) {
             frontLeftLeg.setAttribute("position", `${frontLeftLeg.getAttribute("position").x} ${legOriginalY.frontLeftLeg} ${frontLeftLeg.getAttribute("position").z}`);
             frontRightLeg.setAttribute("position", `${frontRightLeg.getAttribute("position").x} ${legOriginalY.frontRightLeg} ${frontRightLeg.getAttribute("position").z}`);
@@ -455,6 +497,7 @@ function setupDogAnimation() {
     }
 }
 
+// Göra att man går in och ut ur hus när Space knappen är nedtryckt 
 function spacePressed(house) {
     const outsideHouse = document.getElementById("outsideHouse");
     const insideHouse = document.getElementById("insideHouse");
@@ -473,7 +516,7 @@ function spacePressed(house) {
         hideSigns(); 
 }
 
-//skyltar
+// Göra att alla andra skyltar döljs om en skylt visas
 function hideSigns() {
     const signs = document.getElementById("signs");
     Array.from(signs.children).forEach(sign => {
@@ -481,26 +524,26 @@ function hideSigns() {
     });
 }
 
-// Progress bar
+// Skapa en progress bar över husbesök
 function setupHouseProgressBar() {
-    // Count total houses
+    // Räkna antalet hus
     const houses = document.querySelectorAll('.house');
     totalHouses = houses.length;
     
-    // Initialize the array to track visited houses
+    // Skapa array för att räkna hus
     houseVisited = new Array(totalHouses).fill(false);
     
-    // Create progress bar in the UI
+    // Skapa progress bar
     const scene = document.querySelector('a-scene');
     
-    // Create container entity
+    // Skapar progress bar objektet
     const progressContainer = document.createElement('a-entity');
     progressContainer.setAttribute('id', 'progressContainer');
-    progressContainer.setAttribute('position', '0 2.2 -3'); // Position at top middle, relative to camera
+    progressContainer.setAttribute('position', '0 2.2 -3');
     progressContainer.setAttribute('rotation', '0 0 0');
     progressContainer.setAttribute('scale', '1 1 1');
     
-    // Create background for progress bar
+    // Skapa bakgrunden i progress baren
     const progressBackground = document.createElement('a-plane');
     progressBackground.setAttribute('color', 'white');
     progressBackground.setAttribute('width', '2');
@@ -508,17 +551,17 @@ function setupHouseProgressBar() {
     progressBackground.setAttribute('opacity', '1');
     progressContainer.appendChild(progressBackground);
     
-    // Create the progress bar itself
+    // Skapa progress bar strecket
     const progressBar = document.createElement('a-plane');
     progressBar.setAttribute('id', 'progressBar');
     progressBar.setAttribute('color', 'yellow');
-    progressBar.setAttribute('width', '0'); // Start at 0 width
+    progressBar.setAttribute('width', '0');
     progressBar.setAttribute('height', '0.3');
-    progressBar.setAttribute('position', '-0.6 0 0.01'); // Align left
+    progressBar.setAttribute('position', '-0.6 0 0.01');
     progressBar.setAttribute('shader', 'flat');
     progressContainer.appendChild(progressBar);
     
-    // Add text to show progress
+    // Skapa text i progress baren över besökta hus
     const progressText = document.createElement('a-text');
     progressText.setAttribute('id', 'progressText');
     progressText.setAttribute('value', 'Houses: 0/' + totalHouses);
@@ -528,69 +571,29 @@ function setupHouseProgressBar() {
     progressText.setAttribute('width', '4');
     progressContainer.appendChild(progressText);
     
-    // Add the progress container to the camera
+    // Lägga till progress baren i kameran
     const camera = document.querySelector('[camera]');
     camera.appendChild(progressContainer);
 }
 
-// Add this function to update the progress bar
+// Uppdatera progress baren och anger vilket hus som besökts
 function updateHouseProgress(house) {
     houseId = house.getAttribute("data-house-id");
     console.log(houseId);
     if (!houseVisited[houseId]) {
         houseVisited[houseId] = true;
         visitedHouses++;
-        
-        // Update progress bar
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
         
-        // Calculate width based on progress (1.2 is full width from background)
+        // Räknar ut hur långt progress bar strecket ska vara
         const progressWidth = (visitedHouses / totalHouses) * 1.2;
         
-        // Update progress bar width and position
+        // Uppdatera längden av progress bar strecket
         progressBar.setAttribute('width', progressWidth);
         progressBar.setAttribute('position', (-0.6 + progressWidth/2) + ' 0 0.01');
         
-        // Update text
+        // Updatera texten i progress baren
         progressText.setAttribute('value', 'Houses: ' + visitedHouses + '/' + totalHouses);
-        
-        // Add celebration effect when all houses are visited
-        if (visitedHouses === totalHouses) {
-            showCompletionMessage();
-        }
     }
-}
-
-// Add this function to show a completion message
-function showCompletionMessage() {
-    // Create a congratulation message
-    const scene = document.querySelector('a-scene');
-    const message = document.createElement('a-entity');
-    message.setAttribute('id', 'completionMessage');
-    message.setAttribute('position', '0 1.5 -2');
-    message.setAttribute('text', {
-        value: 'Congratulations!\nYou visited all houses!',
-        color: 'black',
-        align: 'center',
-        width: 5,
-        wrapCount: 25
-    });
-    
-    // Add background for better visibility
-    const msgBackground = document.createElement('a-plane');
-    msgBackground.setAttribute('color', 'white');
-    msgBackground.setAttribute('width', '2.5');
-    msgBackground.setAttribute('height', '0.8');
-    msgBackground.setAttribute('opacity', '1');
-    msgBackground.setAttribute('position', '0 0 -0.01');
-    message.appendChild(msgBackground);
-    
-    // Add to scene
-    scene.appendChild(message);
-    
-    // Remove after 5 seconds
-    setTimeout(() => {
-        scene.removeChild(message);
-    }, 5000);
 }
