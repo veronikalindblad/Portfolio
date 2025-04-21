@@ -58,6 +58,14 @@ body {
     text-align: left;
   }
 
+  .content h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Antic Didone', serif;
+    font-weight: 300;
+    text-align: left;
+  }
+
   .cv h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
