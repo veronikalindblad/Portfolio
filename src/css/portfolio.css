@@ -31,7 +31,7 @@ body {
   .about h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Antic Didone', serif;
     font-weight: 300;
   }
   
@@ -45,15 +45,15 @@ body {
     font-size: 4rem;
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Antic Didone', serif;
     font-weight: 300;
-    text-align: left;
+    text-align: center;
   }
 
   .game h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Antic Didone', serif;
     font-weight: 300;
     text-align: left;
   }
@@ -61,7 +61,7 @@ body {
   .cv h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Antic Didone', serif;
     font-weight: 300;
     text-align: left;
   }
@@ -69,7 +69,7 @@ body {
   .contact h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Antic Didone', serif;
     font-weight: 300;
     text-align: left;
   }
