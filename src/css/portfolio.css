@@ -2,7 +2,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #FAF0E6;
-    font-family: 'Preahvihear', sans-serif;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
     color: #4B3E2A;
     display: flex;
     justify-content: center;
@@ -10,35 +11,70 @@ body {
     height: 100vh;
   }
   
-  /* Huvudcontainer */
   .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    padding: 2rem 3rem;
+    margin-top: 7rem;
   }
   
-  /* Kort/ruta */
   .card {
     background-color: #fffefc;
     border-radius: 20px;
     padding: 2rem 3rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    width: 300px;
+    text-align: left;
+    width: 800px;
   }
   
-  /* About text */
   .about h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
   }
   
   .about p {
     font-size: 1.1rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+  }
+
+  .hello h1 {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    margin-top: 5rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    text-align: left;
+  }
+
+  .game h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    text-align: left;
+  }
+
+  .cv h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    text-align: left;
+  }
+
+  .contact h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    text-align: left;
   }
   
-  /* Knapp */
   .game-button {
     padding: 0.7rem 1.5rem;
     background-color: #e8d8c3;
@@ -48,6 +84,8 @@ body {
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
   }
   
   .game-button:hover {
