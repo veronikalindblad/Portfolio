@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #FAF0E6;
+    font-family: 'Preahvihear', sans-serif;
+    color: #4B3E2A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Huvudcontainer */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  /* Kort/ruta */
+  .card {
+    background-color: #fffefc;
+    border-radius: 20px;
+    padding: 2rem 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    width: 300px;
+  }
+  
+  /* About text */
+  .about h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .about p {
+    font-size: 1.1rem;
+  }
+  
+  /* Knapp */
+  .game-button {
+    padding: 0.7rem 1.5rem;
+    background-color: #e8d8c3;
+    border: none;
+    border-radius: 30px;
+    color: #4B3E2A;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .game-button:hover {
+    background-color: #dbc8b4;
+    transform: scale(1.05);
+  }
