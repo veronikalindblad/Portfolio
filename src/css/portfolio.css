@@ -8,7 +8,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
   }
   
   .container {
@@ -17,7 +16,7 @@ body {
     align-items: center;
     gap: 2rem;
     padding: 2rem 3rem;
-    margin-top: 7rem;
+    margin-top: 0.7rem;
   }
   
   .card {
@@ -45,7 +44,7 @@ body {
   .hello h1 {
     font-size: 4rem;
     margin-bottom: 0.5rem;
-    margin-top: 5rem;
+    margin-top: 0.5rem;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
     text-align: left;
