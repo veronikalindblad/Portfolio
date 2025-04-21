@@ -7,12 +7,85 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="src/media/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Lato:300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&display=swap" rel="stylesheet">
-    <!-- Importera CSS -->
-    <link rel="stylesheet" href="src/css/portfolio.css">    
+    <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&display=swap" rel="stylesheet">   
+
+    <style>
+        body {
+          margin: 0;
+          background: #FAF0E6;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+        }
+        video {
+          max-width: 90vw;
+          max-height: 80vh;
+          border-radius: 8px;
+        }
+        .controls {
+          margin-top: 1rem;
+        }
+
+        button {
+        padding: 0.7rem 1.5rem;
+        background-color: #e8d8c3;
+        border: none;
+        border-radius: 30px;
+        color: #4B3E2A;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-family: 'Lato', sans-serif;
+        font-weight: 300;
+    }
+  
+        button:hover {
+        background-color: #dbc8b4;
+        transform: scale(1.05);
+    }
+      </style>
 </head>
 
 <body>
-
+    <video id="videoPlayer" controls autoplay>
+        <source src="../media/Content1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    
+      <div class="controls">
+        <button onclick="prevVideo()">Previous</button>
+        <button onclick="nextVideo()">Next</button>
+      </div>
+    
+      <script>
+        const videoFiles = [
+          '../media/Content1.mp4',
+          '../media/Content2.mp4',
+          '../media/Content3.mp4',
+          '../media/Content4.mp4',
+          '../media/Content5.mp4'
+        ];
+    
+        let currentIndex = 0;
+        const videoPlayer = document.getElementById('videoPlayer');
+    
+        function loadVideo(index) {
+          videoPlayer.src = videoFiles[index];
+          videoPlayer.load();
+          videoPlayer.play();
+        }
+    
+        function nextVideo() {
+          currentIndex = (currentIndex + 1) % videoFiles.length;
+          loadVideo(currentIndex);
+        }
+    
+        function prevVideo() {
+          currentIndex = (currentIndex - 1 + videoFiles.length) % videoFiles.length;
+          loadVideo(currentIndex);
+        }
+      </script>
 </body>
 </html>
